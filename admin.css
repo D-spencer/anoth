@@ -1,0 +1,63 @@
+/* Admin-only stylesheet, loaded after the shared app styles. */
+.stApp {
+    --text-color: #312e81;
+    --secondary-background-color: #ffffff;
+    background: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81, #111827);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    color: #312e81;
+}
+[data-testid="stMainBlockContainer"] {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2rem !important;
+    margin: 2rem auto;
+    width: calc(100% - 3rem);
+    box-shadow: 0 12px 40px rgba(15, 23, 42, .2);
+}
+[data-testid="stMain"] :is(.stMarkdown, .stText, h1, h2, h3, p, label),
+[data-testid="stMain"] [data-testid="stWidgetLabel"] p,
+[data-testid="stMain"] [data-testid="stMetricValue"] p {
+    color: #312e81 !important;
+    text-shadow: none;
+}
+[data-testid="stMain"] h1 { color: #5B4BDB !important; }
+[data-testid="stVerticalBlockBorderWrapper"], .result-card,
+[data-testid="stExpander"], [data-testid="stPlotlyChart"], [data-testid="stDataFrame"] {
+    background: #ffffff !important;
+    border: 1px solid #e4e1f3 !important;
+    box-shadow: 0 4px 16px rgba(49, 46, 129, .06) !important;
+    border-radius: 16px;
+}
+[data-testid="stMain"] div[data-baseweb="select"] > div,
+[data-testid="stMain"] div[data-baseweb="input"],
+[data-testid="stMain"] input {
+    background: #ffffff !important;
+    border-color: #d7d2ee !important;
+    color: #312e81 !important;
+    box-shadow: none !important;
+}
+[data-testid="stMain"] div[data-baseweb="select"] :is(span, input, div:last-child, div:last-child *),
+[data-testid="stDataFrame"] div, [data-testid="stDataFrame"] [role="grid"] {
+    color: #312e81 !important;
+}
+[data-testid="stMain"] div[data-baseweb="select"] svg { fill: #312e81 !important; }
+ul[role="listbox"], li[role="option"], li[role="option"] *, div[role="listbox"] div {
+    background: #ffffff !important;
+    color: #312e81 !important;
+}
+li[role="option"]:hover, li[role="option"][aria-selected="true"] { background: #eeeafb !important; }
+[data-testid="stDataFrame"] data-grid { --bg-color: #ffffff !important; --text-color: #312e81 !important; }
+[data-testid="stMain"] :is(.stButton, .stDownloadButton) button {
+    background: #312e81 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+[data-testid="stMain"] :is(.stButton, .stDownloadButton) button p { color: #ffffff !important; }
+section[data-testid="stSidebar"] { background: #312e81; color: #ffffff; }
+section[data-testid="stSidebar"] :is(h3, p) { color: #ffffff !important; }
+@media (max-width: 768px) {
+    [data-testid="stMainBlockContainer"] { width: calc(100% - 1rem); padding: 1rem !important; margin: 1rem auto; }
+    .results-container { flex-wrap: wrap; }
+    .result-card { min-width: 130px; }
+}

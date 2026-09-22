@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head><meta charset="utf-8"></head><body>
+<script>
+let storageKey, lastCommand, lastResult;
+const send = (type, extra = {}) => window.parent.postMessage({isStreamlitMessage: true, type, ...extra}, '*');
+function report(ack = null) {
+  let result;
+  try { result = {value: localStorage.getItem(storageKey), ack}; }
+  catch (_) { result = {error: true, ack}; }
+  const serialized = JSON.stringify(result);
+  if (serialized !== lastResult) {
+    lastResult = serialized;
+    send('streamlit:setComponentValue', {value: result, dataType: 'json'});
+  }
+}
+window.addEventListener('message', event => {
+  if (event.source !== window.parent || event.data.type !== 'streamlit:render') return;
+  storageKey = event.data.args.storage_key;
+  const command = event.data.args.command;
+  try {
+    if (command && command.id !== lastCommand) {
+      if (command.value === null) localStorage.removeItem(storageKey);
+      else localStorage.setItem(storageKey, command.value);
+      lastCommand = command.id;
+    }
+    report(command ? command.id : null);
+  } catch (_) {
+    send('streamlit:setComponentValue', {value: {error: true}, dataType: 'json'});
+  }
+  send('streamlit:setFrameHeight', {height: 0});
+});
+window.addEventListener('storage', event => { if (event.key === storageKey) report(); });
+send('streamlit:componentReady', {apiVersion: 1});
+send('streamlit:setFrameHeight', {height: 0});
+</script></body></html>
