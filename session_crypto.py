@@ -7,11 +7,12 @@ from cryptography.fernet import Fernet
 SESSION_LIFETIME_SECONDS = 7 * 24 * 60 * 60
 
 
-def encrypt_session(key, session, expires_at):
+def encrypt_session(key, session, expires_at, page="Tuberculosis"):
     payload = {
         "access_token": session.access_token,
         "refresh_token": session.refresh_token,
         "expires_at": expires_at,
+        "page": page,
     }
 
     return Fernet(key).encrypt(

@@ -4,6 +4,7 @@ import streamlit as st
 st.set_page_config(page_title="Disease Prediction App", layout="wide", initial_sidebar_state="collapsed")
 
 import time
+from persistent_session import remember_disease
 from nav.tb_page import show_tb_page 
 from nav.hiv_page import show_hiv_page
 from auth import sign_up, login, logout, send_reset_otp, verify_otp_and_update_password,can_request_otp
@@ -687,15 +688,15 @@ def dashboard():
     # =========================
     query_params = st.query_params
 
-    if "page" in query_params:
-        url_page = query_params["page"]
+    if "disease" in query_params or "page" in query_params:
+        url_page = query_params.get("disease", query_params.get("page"))
         if url_page in disease_options:
             st.session_state.page = url_page
 
 
     def set_page(page):
-        st.session_state.page = page
-        st.query_params["page"] = page
+        remember_disease(page)
+        st.query_params["disease"] = page
 
 
     # =========================
@@ -831,10 +832,7 @@ def dashboard():
 
 
             if selected is not None and selected != st.session_state.page:
-                st.session_state.page = selected
-
-                if st.query_params.get("page") != selected:
-                    st.query_params["page"] = selected
+                set_page(selected)
 
                 st.rerun()
 
@@ -854,8 +852,7 @@ def dashboard():
                 type="primary" if st.session_state.page == disease else "secondary",
                 key=f"btn_{disease}"
             ):
-                st.session_state.page = disease
-                st.query_params["page"] = disease
+                set_page(disease)
                 st.rerun()
 
 

@@ -66,11 +66,19 @@ def _save_browser_token(session):
     encrypted_value = encrypt_session(
         _encryption_key(),
         session,
-        st.session_state["_session_deadline"]
+        st.session_state["_session_deadline"],
+        st.session_state.get("page", "Tuberculosis")
     )
 
     st.session_state["_session_encrypted_value"] = encrypted_value
     _queue_browser_write(encrypted_value)
+
+
+def remember_disease(page):
+    if page not in ("Tuberculosis", "HIV/AIDS"):
+        return
+    st.session_state["page"] = page
+    _save_browser_token(st.session_state["session"])
 
 
 def save_persistent_session(session):
@@ -109,7 +117,9 @@ def restore_persistent_session():
     st.html("""
         <style>
         .st-key-dmd_session_transport,
-        .st-key-dmd_session_timer {
+        .st-key-dmd_session_timer,
+        [data-testid="stElementContainer"]:has(.st-key-dmd_session_transport),
+        [data-testid="stElementContainer"]:has(.st-key-dmd_session_timer) {
             position: absolute !important;
             width: 0 !important;
             height: 0 !important;
@@ -190,6 +200,9 @@ def restore_persistent_session():
 
             _set_authenticated_user(response.session)
             st.session_state["_session_deadline"] = payload["expires_at"]
+            saved_page = payload.get("page", "Tuberculosis")
+            if saved_page in ("Tuberculosis", "HIV/AIDS"):
+                st.session_state["page"] = saved_page
             _save_browser_token(response.session)
             st.rerun()
 
@@ -198,6 +211,12 @@ def restore_persistent_session():
         st.rerun()
 
     if st.session_state.get("user"):
+        st.html("""<style>
+            [data-testid="stMainBlockContainer"] {
+                padding-top: 0.5rem !important;
+                margin-top: 0 !important;
+            }
+        </style>""")
         with st.container(key="dmd_session_timer"):
             st_autorefresh(
                 interval=60_000,
