@@ -16,7 +16,6 @@ try {
     if (!appWindow.__dmdMobileSidebarAutoClose) {
         appWindow.__dmdMobileSidebarAutoClose = true;
         appDocument.addEventListener("click", (event) => {
-            if (!appWindow.matchMedia("(max-width: 768px)").matches) return;
             const target = event.target instanceof appWindow.Element
                 ? event.target : event.target.parentElement;
             const sidebar = target && target.closest('[data-testid="stSidebar"]');
@@ -32,7 +31,6 @@ try {
             );
             if (!isDisease && !isPage) return;
             appWindow.setTimeout(() => {
-                if (!appWindow.matchMedia("(max-width: 768px)").matches) return;
                 const collapse = appDocument.querySelector(
                     '[data-testid="stSidebarCollapseButton"] button'
                     + ', button[data-testid="stSidebarCollapseButton"]'
