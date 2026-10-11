@@ -1,9 +1,6 @@
 import streamlit as st
 import pandas as pd
 from auth import logout
-from persistent_session import restore_session
-
-restore_session()
 from database import get_prediction_history
 
 hide_streamlit_style = """

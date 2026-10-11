@@ -1,7 +1,7 @@
 from database import supabase, get_user_role, get_user_name
 import streamlit as st
 import time
-from persistent_session import start_session, clear_session
+from persistent_session import clear_persistent_session, restore_persistent_session, save_persistent_session
 
 
 
@@ -44,7 +44,7 @@ def sign_up(email, password, full_name):
             }).execute()
 
             if response.session:
-                start_session(response.session)
+                save_persistent_session(response.session)
 
         return response
 
@@ -65,7 +65,7 @@ def login(email, password):
         if response.user and response.session:
 
 
-            start_session(response.session)
+            save_persistent_session(response.session)
             return True
         
 
@@ -77,9 +77,11 @@ def login(email, password):
 
 
 # ---------------- LOGOUT ----------------
-def logout():
-    clear_session()
+def _logout():
+    clear_persistent_session()
     st.rerun()
+
+
 
 
 # STEP 1: Send a true Password Reset OTP Code
@@ -104,7 +106,6 @@ def verify_otp_and_update_password(email, token, new_password):
             supabase.auth.update_user({
                 "password": new_password
             })
-            clear_session()
             return True
 
         return False
@@ -115,5 +116,13 @@ def verify_otp_and_update_password(email, token, new_password):
 
 def can_request_otp():
     return (time.time() - st.session_state.otp_timer_start) >= st.session_state.otp_cooldown
+
+
+def __getattr__(name):
+    if name == "logout":
+        restore_persistent_session()
+        return _logout
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 

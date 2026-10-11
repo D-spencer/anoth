@@ -19,3 +19,5 @@ toml==0.10.2
 streamlit_autorefresh
 qrcode[pil]
 cryptography>=44.0.0,<47
+
+

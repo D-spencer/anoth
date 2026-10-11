@@ -4,18 +4,23 @@ import streamlit as st
 SUPABASE_URL =  st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
-def get_client():
+def get_supabase_client():
     if "_supabase_client" not in st.session_state:
-        st.session_state["_supabase_client"] = create_client(SUPABASE_URL, SUPABASE_KEY)
+        st.session_state["_supabase_client"] = create_client(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        )
+
     return st.session_state["_supabase_client"]
 
 
-class SessionClient:
+class SessionSupabaseClient:
     def __getattr__(self, name):
-        return getattr(get_client(), name)
+        return getattr(get_supabase_client(), name)
 
 
-supabase = SessionClient()
+supabase = SessionSupabaseClient()
+
 
 
 def save_prediction(

@@ -3,9 +3,6 @@ import pandas as pd
 from database import get_all_predictions,get_user_role,get_all_feedback
 import plotly.express as px
 from auth import logout
-from persistent_session import restore_session
-
-restore_session()
 
 
 
@@ -26,7 +23,6 @@ def local_css(file_name):
 
 # ================= APPLY CSS =================
 local_css("styles.css")
-local_css("admin.css")
 st.markdown("""
 <style>
 
@@ -66,14 +62,12 @@ if st.session_state.get("role") != "admin":
 
 # -------------Fetch all predictions----------------
 data = get_all_predictions()
-df = pd.DataFrame(data) if data else pd.DataFrame(columns=["user_email", "disease", "prediction", "probability", "created_at"])
-df["disease"] = df["disease"].replace({"TB": "Tuberculosis", "HIV": "HIV/AIDS"})
+df = pd.DataFrame(data) if data else pd.DataFrame()
 
 
 ### feedback data---------------
 feedback_data = get_all_feedback()
-feedback_df = pd.DataFrame(feedback_data) if feedback_data else pd.DataFrame(columns=["user_email", "feedback", "created_at"])
-filtered_feedback = feedback_df.copy()
+feedback_df = pd.DataFrame(feedback_data) if feedback_data else pd.DataFrame()
 
 
 #---------------System Overview metrics----------------
@@ -111,7 +105,7 @@ st.header("📊 System Overview")
 total_predictions = len(df)
 total_users = df["user_email"].nunique() if not df.empty else 0
 tb_count = len(df[df["disease"] == "Tuberculosis"]) if not df.empty else 0
-hiv_count = len(df[df["disease"] == "HIV/AIDS"]) if not df.empty else 0
+hiv_count = len(df[df["disease"] == "HIV"]) if not df.empty else 0
 total_feedback = len(feedback_df)
 
 # ---------------- Row 1 ----------------
@@ -167,12 +161,12 @@ col1, col2 = st.columns(2)
 with col1:
     disease_filter = st.selectbox(
         "Filter by Disease",
-        ["ALL", "Tuberculosis", "HIV/AIDS"]
+        ["ALL", "TB","HIV"]
     )
 with col2:
     user_filter = st.selectbox(
         "Filter by User",
-        ["ALL"] + list(df["user_email"].unique() if not df.empty else [])
+        ["ALL"] + list(df["user_email"].unique() if not df.empty else ["ALL"])
     )
 
 
@@ -249,7 +243,7 @@ if not filtered_df.empty:
         values = disease_counts.values,
         names = disease_counts.index,
        
-        color_discrete_sequence = ["#312e81", "#a9a1e8"],
+        color_discrete_sequence = px.colors.qualitative.Dark24,
         title = "Disease Distribution",
         hover_data = {"value": disease_counts.values},
     )
@@ -265,12 +259,12 @@ if not filtered_df.empty:
        
         title={
         'font': {
-            'color': '#312e81',
+            'color': '#FFFFFF',
             'size': 24
             }
         },
     
-        template ="plotly_white",
+        template ="plotly_dark",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         title_font_size=24,
@@ -278,19 +272,19 @@ if not filtered_df.empty:
         height=700,
         width=800,
         margin=dict(l=20, r=20, t=50, b=20),
-        font=dict(size=14, color="#312e81"),
+        font=dict(size=14, color="#FFFFFF"),
         showlegend=True,
         yaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",
+        linecolor="rgba(255, 255, 255, 0.2)"
         ),
          xaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",
+        linecolor="rgba(255, 255, 255, 0.2)"
         ),
         legend = dict(
             orientation="v",
@@ -298,15 +292,14 @@ if not filtered_df.empty:
             y=-0.5,
             xanchor="left",
             x=1.01,
-            font=dict(color="#312e81")
+            font=dict(color="#FFFFFF")
         ),
         modebar=dict(
-        activecolor="#5B4BDB",  
-        color="#312e81",       
+        activecolor="#FFD700",  
+        color="#FFFFFF",       
         bgcolor="rgba(0, 0, 0, 0)" # Keeps the toolbar background completely transparent
         )   
     )
-    fig.update_layout(template="plotly_white", colorway=["#312e81", "#a9a1e8"])
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -326,18 +319,18 @@ if not filtered_df.empty:
         x="prediction",
         y="count",
         color="prediction",
-        color_discrete_sequence=["#312e81", "#a9a1e8"],
+        color_discrete_sequence=["#636EFA", "#EF553B"],
         title="Prediction Outcome Distribution",
         text_auto=True,
     )
    
     fig.update_layout(
     # Make all general text white (title, legend, etc.)
-    font=dict(color="#312e81"),
+    font=dict(color="#FFFFFF"),
     
     title={
         'font': {
-            'color': '#312e81',
+            'color': '#FFFFFF',
             'size': 24
         }
     },
@@ -345,24 +338,24 @@ if not filtered_df.empty:
    
     legend={
         'font': {
-            'color': '#312e81'
+            'color': '#FFFFFF'
         }
     },
     
    
     xaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",  
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",  
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
     
     yaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
     # Make the default plot background blocks completely transparent
@@ -371,14 +364,13 @@ if not filtered_df.empty:
     
     
     modebar=dict(
-        activecolor="#5B4BDB",    
-        color="#312e81",          
+        activecolor="#FFD700",    
+        color="#FFFFFF",          
         bgcolor="rgba(0, 0, 0, 0)"
     )
     )
 
 
-    fig.update_layout(template="plotly_white", colorway=["#312e81", "#a9a1e8"])
     st.plotly_chart(fig, use_container_width=True)
 
 ##TB VS HIV + RESULT 
@@ -397,17 +389,17 @@ if not filtered_df.empty:
         barmode="group",
         title="TB VS HIV Outcomes",
         text_auto=True,
-        color_discrete_sequence=["#312e81", "#a9a1e8"],
+        color_discrete_sequence=["#636EFA", "#EF553B"],
     )
 
     
     fig.update_layout(
     # Make all general text white (title, legend, etc.)
-    font=dict(color="#312e81"),
+    font=dict(color="#FFFFFF"),
 
     title={
         'font': {
-            'color': '#312e81',
+            'color': '#FFFFFF',
             'size': 24
         }
     },
@@ -415,24 +407,24 @@ if not filtered_df.empty:
    
     legend={
         'font': {
-            'color': '#312e81'
+            'color': '#FFFFFF'
         }
     },
     
     
     xaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",  
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",  
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
     
     yaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
    
@@ -441,14 +433,13 @@ if not filtered_df.empty:
     
    
     modebar=dict(
-        activecolor="#5B4BDB",   
-        color="#312e81",         
+        activecolor="#FFD700",   
+        color="#FFFFFF",         
         bgcolor="rgba(0, 0, 0, 0)"
     )
     )
 
 
-    fig.update_layout(template="plotly_white", colorway=["#312e81", "#a9a1e8"])
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -479,11 +470,11 @@ if not filtered_df.empty:
     
     fig.update_layout(
     # Make all general text white (title, legend, etc.)
-    font=dict(color="#312e81"),
+    font=dict(color="#FFFFFF"),
     
     title={
         'font': {
-            'color': '#312e81',
+            'color': '#FFFFFF',
             'size': 24
         }
     },
@@ -491,24 +482,24 @@ if not filtered_df.empty:
     # 2. Style the Legend text color explicitly
     legend={
         'font': {
-            'color': '#312e81'
+            'color': '#FFFFFF'
         }
     },
     
    
     xaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",  
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",  
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
     
     yaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
     
@@ -517,8 +508,8 @@ if not filtered_df.empty:
     
    
     modebar=dict(
-        activecolor="#5B4BDB",   
-        color="#312e81",          
+        activecolor="#FFD700",   
+        color="#FFFFFF",          
         bgcolor="rgba(0, 0, 0, 0)"
     )
     )
@@ -526,16 +517,15 @@ if not filtered_df.empty:
 
     fig.update_traces(
     line=dict(width=3), 
-    marker=dict(size=8, color="#312e81"),
+    marker=dict(size=8, color="#FFFFFF"),
     hoverlabel=dict(
-        bgcolor="#ffffff", 
+        bgcolor="#090d1f", 
         font_size=14,
-        font_color="#312e81"
+        font_color="#FFFFFF"
     )
     )
 
 
-    fig.update_layout(template="plotly_white", colorway=["#312e81", "#a9a1e8"])
     st.plotly_chart(fig, use_container_width=True)
   
 
@@ -561,11 +551,11 @@ if not filtered_df.empty:
     
     fig.update_layout(
     
-    font=dict(color="#312e81"),
+    font=dict(color="#FFFFFF"),
   
     title={
         'font': {
-            'color': '#312e81',
+            'color': '#FFFFFF',
             'size': 24
         }
     },
@@ -573,24 +563,24 @@ if not filtered_df.empty:
     
     legend={
         'font': {
-            'color': '#312e81'
+            'color': '#FFFFFF'
         }
     },
     
     
     xaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",  
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",  
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
     
     yaxis=dict(
-        title_font=dict(color="#312e81"),
-        tickfont=dict(color="#312e81"),
-        gridcolor="rgba(49, 46, 129, 0.1)",
-        linecolor="rgba(49, 46, 129, 0.2)"
+        title_font=dict(color="#FFFFFF"),
+        tickfont=dict(color="#FFFFFF"),
+        gridcolor="rgba(255, 255, 255, 0.1)",
+        linecolor="rgba(255, 255, 255, 0.2)"
     ),
     
     
@@ -599,13 +589,12 @@ if not filtered_df.empty:
     
     
     modebar=dict(
-        activecolor="#5B4BDB",    
-        color="#312e81",          
+        activecolor="#FFD700",    
+        color="#FFFFFF",          
         bgcolor="rgba(0, 0, 0, 0)"
     )
     )
 
-    fig.update_layout(template="plotly_white", colorway=["#312e81", "#a9a1e8"])
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -657,7 +646,7 @@ else:
     if search:
         filtered_feedback = filtered_feedback[
             filtered_feedback["user_email"]
-            .str.contains(search, case=False, na=False, regex=False)
+            .str.contains(search, case=False, na=False)
         ]
 
     # Latest first

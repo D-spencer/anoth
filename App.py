@@ -1,4 +1,8 @@
 import streamlit as st
+
+# Page config must run before the session component or any other Streamlit command.
+st.set_page_config(page_title="Disease Prediction App", layout="wide", initial_sidebar_state="collapsed")
+
 import time
 from nav.tb_page import show_tb_page 
 from nav.hiv_page import show_hiv_page
@@ -11,9 +15,6 @@ import streamlit.components.v1 as components
 
 
 
-
-# Page config
-st.set_page_config(page_title="Disease Prediction App", layout="wide", initial_sidebar_state="collapsed")
 
 # Hide default Streamlit elements (but keep sidebar toggle functionality)
 hide_streamlit_style = """
@@ -59,10 +60,90 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
 
-from persistent_session import restore_session
+# #-----------------Hide Side bar---------------------------
+# ---------------- SESSION STATE INIT ----------------
 
-restore_session()
+def init_session():
+    defaults = {
+    "user": None,
+    "role": "user",
+    "session": None,
+    "full_name": "",
+    "active_user_id": None
+    }
+
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+init_session()
+
+
+
+# # ---------------- RESTORE SUPABASE SESSION ----------------
+# if not st.session_state.get("session"):
+#     try:
+#         session = supabase.auth.get_session()
+
+
+#         if session and getattr(session, "user", None):
+
+#             # Restore authenticated user
+#             st.session_state["session"] = session
+#             st.session_state["user"] = session.user
+#             st.session_state["active_user_id"] = session.user.id
+
+#             # Fetch role
+#             role = get_user_role(session.user.id)
+#             st.session_state["role"] = role or "user"
+
+#             # Fetch full name
+#             full_name = get_user_name(session.user.id)
+#             st.session_state["full_name"] = full_name or ""
+
+#         else:
+#             # No active session found
+#             st.session_state["session"] = None
+#             st.session_state["user"] = None
+#             st.session_state["role"] = "user"
+#             st.session_state["full_name"] = ""
+#             st.session_state["active_user_id"] = None
+
+#     except Exception as e:
+#         st.error(f"Session restore error: {e}")
+
+#         st.session_state["session"] = None
+#         st.session_state["user"] = None
+#         st.session_state["role"] = "user"
+#         st.session_state["full_name"] = ""
+#         st.session_state["active_user_id"] = None
+
+
+
+# ---------------- RESTORE USER ----------------
+
+if "user" not in st.session_state:
+    st.session_state["user"] = None
+
+if "session" not in st.session_state:
+    st.session_state["session"] = None
+
+if "role" not in st.session_state:
+    st.session_state["role"] = "user"
+
+if "full_name" not in st.session_state:
+    st.session_state["full_name"] = ""
+
+if "active_user_id" not in st.session_state:
+    st.session_state["active_user_id"] = None
+
+
+# ---------------- GET USER ----------------
 user = st.session_state.get("user")
+
+if "full_name" not in st.session_state:
+    st.session_state["full_name"] = ""
+
 
 # ---------------- HIDE SIDEBAR (ONLY IF NOT LOGGED IN) ----------------
 if not user:

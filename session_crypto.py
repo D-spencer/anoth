@@ -1,24 +1,40 @@
 import json
 import time
+
 from cryptography.fernet import Fernet
 
-SESSION_SECONDS = 7 * 24 * 60 * 60
+
+SESSION_LIFETIME_SECONDS = 7 * 24 * 60 * 60
 
 
-def encode_session(key, session, deadline):
-    return Fernet(key).encrypt(json.dumps({
+def encrypt_session(key, session, expires_at):
+    payload = {
         "access_token": session.access_token,
         "refresh_token": session.refresh_token,
-        "deadline": deadline,
-    }).encode()).decode()
+        "expires_at": expires_at,
+    }
+
+    return Fernet(key).encrypt(
+        json.dumps(payload).encode("utf-8")
+    ).decode("utf-8")
 
 
-def decode_session(key, token):
-    data = json.loads(Fernet(key).decrypt(token.encode()))
-    if not isinstance(data, dict) or not isinstance(data.get("deadline"), (int, float)):
-        raise ValueError("Invalid session")
-    if not time.time() < data["deadline"] <= time.time() + SESSION_SECONDS:
+def decrypt_session(key, encrypted_value):
+    payload = json.loads(
+        Fernet(key).decrypt(encrypted_value.encode("utf-8"))
+    )
+
+    expires_at = payload.get("expires_at")
+    now = time.time()
+
+    if not isinstance(expires_at, (int, float)):
+        raise ValueError("Invalid session expiry")
+
+    if not now < expires_at <= now + SESSION_LIFETIME_SECONDS:
         raise ValueError("Session expired")
-    if not all(isinstance(data.get(k), str) and data[k] for k in ("access_token", "refresh_token")):
-        raise ValueError("Invalid session")
-    return data
+
+    for field in ("access_token", "refresh_token"):
+        if not isinstance(payload.get(field), str) or not payload[field]:
+            raise ValueError("Invalid session data")
+
+    return payload
