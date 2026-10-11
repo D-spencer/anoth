@@ -104,13 +104,31 @@ def restore_persistent_session():
         st.session_state.setdefault(name, value)
 
     encryption_key = _encryption_key()
+    # Only the session transport containers are removed from document flow.
+    # Their iframes remain mounted so storage and timer messages still work.
+    st.html("""
+        <style>
+        .st-key-dmd_session_transport,
+        .st-key-dmd_session_timer {
+            position: absolute !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            pointer-events: none !important;
+        }
+        </style>
+    """)
     pending_write = st.session_state.get("_session_browser_write")
-    browser_result = _storage(
-        storage_key=_storage_key(),
-        command=pending_write,
-        default=None,
-        key="dmd_session_storage"
-    )
+    with st.container(key="dmd_session_transport"):
+        browser_result = _storage(
+            storage_key=_storage_key(),
+            command=pending_write,
+            default=None,
+            key="dmd_session_storage"
+        )
 
     if browser_result is None:
         st.stop()
@@ -180,7 +198,8 @@ def restore_persistent_session():
         st.rerun()
 
     if st.session_state.get("user"):
-        st_autorefresh(
-            interval=60_000,
-            key="persistent_session_expiry_check"
-        )
+        with st.container(key="dmd_session_timer"):
+            st_autorefresh(
+                interval=60_000,
+                key="persistent_session_expiry_check"
+            )
