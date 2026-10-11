@@ -128,10 +128,13 @@ def save_feedback(user_email, feedback):
         response = (
             supabase
             .table("feedback")
-            .insert({
-                "user_email": user_email,
-                "feedback": feedback
-            })
+            .insert(
+                {
+                    "user_email": user_email,
+                    "feedback": feedback
+                },
+                returning="minimal"
+            )
             .execute()
         )
 
@@ -139,6 +142,7 @@ def save_feedback(user_email, feedback):
 
     except Exception as e:
         st.error(f"Feedback Error: {e}")
+        return None
 
 
 def get_all_feedback():
