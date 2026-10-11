@@ -9,6 +9,43 @@ let storageKey;
 let lastCommandId;
 let lastResult;
 
+// Install once on the app document, so navigation reruns do not add listeners.
+try {
+    const appWindow = window.parent;
+    const appDocument = appWindow.document;
+    if (!appWindow.__dmdMobileSidebarAutoClose) {
+        appWindow.__dmdMobileSidebarAutoClose = true;
+        appDocument.addEventListener("click", (event) => {
+            if (!appWindow.matchMedia("(max-width: 768px)").matches) return;
+            const target = event.target instanceof appWindow.Element
+                ? event.target : event.target.parentElement;
+            const sidebar = target && target.closest('[data-testid="stSidebar"]');
+            if (!sidebar) return;
+            const control = target.closest("a, button");
+            if (!control) return;
+            const label = (control.textContent || "").trim();
+            const isDisease = control.tagName === "BUTTON"
+                && ["Tuberculosis", "HIV/AIDS"].includes(label);
+            const isPage = control.tagName === "A" && (
+                control.closest('[data-testid="stSidebarNav"]')
+                || control.closest('[data-testid="stPageLink"]')
+            );
+            if (!isDisease && !isPage) return;
+            appWindow.setTimeout(() => {
+                if (!appWindow.matchMedia("(max-width: 768px)").matches) return;
+                const collapse = appDocument.querySelector(
+                    '[data-testid="stSidebarCollapseButton"] button'
+                    + ', button[data-testid="stSidebarCollapseButton"]'
+                    + ', [data-testid="stSidebar"] button[aria-label="Collapse sidebar"]'
+                );
+                if (collapse) collapse.click();
+            }, 50);
+        }, true);
+    }
+} catch (_) {
+    // Browser isolation must never interrupt authentication storage.
+}
+
 const send = (type, extra = {}) => {
     window.parent.postMessage(
         { isStreamlitMessage: true, type, ...extra },

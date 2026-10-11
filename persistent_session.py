@@ -213,8 +213,8 @@ def restore_persistent_session():
     if st.session_state.get("user"):
         st.html("""<style>
             [data-testid="stMainBlockContainer"] {
-                padding-top: 0.5rem !important;
-                margin-top: 0 !important;
+                padding-top: 0 !important;
+                margin-top: -1rem !important;
             }
         </style>""")
         with st.container(key="dmd_session_timer"):
