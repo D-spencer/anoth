@@ -189,8 +189,12 @@ def show_hiv_page():
 
             with st.spinner("Analyzing patient data..."):
                 time.sleep(1.5)
-                pred = int(model.predict(input_data)[0])
-                prob = float(model.predict_proba(input_data)[0][1])
+                # Class 1 represents the positive (disease-risk) class.
+                # Always display its probability, and apply the requested
+                # 50% threshold consistently to both the label and percentage.
+                class_index = list(model.classes_).index(1)
+                prob = float(model.predict_proba(input_data)[0][class_index])
+                pred = int(prob >= 0.50)
 
             st.session_state[result_key] = {
                 "answers": answer_signature,
@@ -220,7 +224,7 @@ def show_hiv_page():
                 st.error(f"High Risk of HIV/AIDS ({round(prob * 100, 2)}%)")
             else:
                 st.success(
-                    f"Low Risk of HIV/AIDS ({round((1 - prob) * 100, 2)}%)"
+                    f"Low Risk of HIV/AIDS ({round(prob * 100, 2)}%)"
                 )
 
         if pred == 1:
