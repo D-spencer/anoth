@@ -159,16 +159,22 @@ def show_hiv_page():
 
 
 
-    # PREDICTION BUTTON
-    if st.button("Run Prediction"):
-        
-        # Validation Logic: Check if any value in our dictionary is None
+    # Preserve the latest prediction through Streamlit reruns.
+    result_key = "hiv_prediction_result"
+    answer_signature = tuple(answers.items())
+    saved_result = st.session_state.get(result_key)
+    if saved_result and saved_result.get("answers") != answer_signature:
+        st.session_state.pop(result_key, None)
+
+    if st.button("Run Prediction", key="hiv_run_prediction"):
         unanswered_count = sum(1 for val in answers.values() if val is None)
 
         if unanswered_count > 0:
-            st.error(f"⚠️ Please answer all fields. There are {unanswered_count} questions left empty.")
+            st.error(
+                f"⚠️ Please answer all fields. There are "
+                f"{unanswered_count} questions left empty."
+            )
         else:
-            # All fields are filled, proceed with prediction
             input_data = pd.DataFrame([{
                 "age": answers['age'],
                 "marital_status": answers['marital_status'],
@@ -183,41 +189,47 @@ def show_hiv_page():
 
             with st.spinner("Analyzing patient data..."):
                 time.sleep(1.5)
-                pred = model.predict(input_data)[0]
-                prob = model.predict_proba(input_data)[0][1]
+                pred = int(model.predict(input_data)[0])
+                prob = float(model.predict_proba(input_data)[0][1])
 
-            # Create two side-by-side columns for the header and the status box
-            res_col1, res_col2 = st.columns([1, 5])  # 1:4 ratio keeps them close together
-
-            with res_col1:
-                st.markdown("## Result:")
-
-            with res_col2:
-                if pred == 1:
-                    st.error(f"High Risk of HIV/AIDS ({round(prob*100, 2)}%)")
-                else:
-                    st.success(f"Low Risk of HIV/AIDS ({round((1-prob)*100, 2)}%)")
-
-            # Recommendations can sit nicely underneath the main row
-            if pred == 1:
-                st.warning("""
-                **Recommendation:** Please visit a healthcare center for proper testing and medical consultation.
-                """)
-            else:
-                st.info("""
-                **Recommendation:** Maintain healthy habits and regular medical checkups.
-                """)
-
-
-
+            st.session_state[result_key] = {
+                "answers": answer_signature,
+                "prediction": pred,
+                "probability": prob,
+            }
 
             save_prediction(
                 user_email=st.session_state['user'].email,
                 disease='HIV/AIDS',
                 input_data=input_data.to_dict(orient='records')[0],
-                prediction=int(pred),
-                probability=float(prob)
+                prediction=pred,
+                probability=prob
             )
 
-            
-   
+    # Always render the saved result, even after unrelated reruns.
+    saved_result = st.session_state.get(result_key)
+    if saved_result and saved_result.get("answers") == answer_signature:
+        pred = saved_result["prediction"]
+        prob = saved_result["probability"]
+
+        res_col1, res_col2 = st.columns([1, 5])
+        with res_col1:
+            st.markdown("## Result:")
+        with res_col2:
+            if pred == 1:
+                st.error(f"High Risk of HIV/AIDS ({round(prob * 100, 2)}%)")
+            else:
+                st.success(
+                    f"Low Risk of HIV/AIDS ({round((1 - prob) * 100, 2)}%)"
+                )
+
+        if pred == 1:
+            st.warning(
+                "**Recommendation:** Please visit a healthcare center for "
+                "proper testing and medical consultation."
+            )
+        else:
+            st.info(
+                "**Recommendation:** Maintain healthy habits and regular "
+                "medical checkups."
+            )

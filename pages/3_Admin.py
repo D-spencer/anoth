@@ -3,6 +3,9 @@ import pandas as pd
 from database import get_all_predictions,get_user_role,get_all_feedback
 import plotly.express as px
 from auth import logout
+from persistent_session import restore_persistent_session
+
+restore_persistent_session()
 
 
 

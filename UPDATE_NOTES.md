@@ -21,7 +21,7 @@ Login persists across refreshes and browser restarts on the same browser profile
 for seven days from sign-in. Token refresh does not extend that deadline.
 All three pages restore the session before checking access. Logout clears stored
 credentials and account-specific Streamlit state; tabs receive storage changes.
-Open pages check expiry every minute, and each interaction checks it again.
+Session expiry and Supabase authentication are checked whenever the user interacts with or opens an app page. No periodic page refresh is used.
 Supabase clients are isolated per Streamlit session instead of shared globally.
 
 Browser storage contains an encrypted, authenticated token bundle; passwords and
@@ -42,7 +42,7 @@ properties and obsolete animation code were consolidated. Dropdown backgrounds
 are scoped to listboxes instead of every unordered list.
 
 Also fixed empty-feedback export and inconsistent TB/HIV dashboard filtering.
-Prediction model files and questionnaire logic were not changed.
+Prediction model files and questionnaire inputs were not changed. TB and HIV prediction results are now retained in Streamlit session state across normal reruns and are cleared when the questionnaire answers change.
 
 ## Verification
 

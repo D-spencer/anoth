@@ -16,7 +16,6 @@ supabase==2.30.0
 supabase-auth==2.30.0
 supabase-functions==2.30.0
 toml==0.10.2
-streamlit_autorefresh
 qrcode[pil]
 cryptography>=44.0.0,<47
 

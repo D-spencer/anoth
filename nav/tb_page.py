@@ -440,23 +440,28 @@ def show_tb_page():
    
 
 
-    # When they click the prediction button, check everything first!
-    if st.button('Run Prediction'):
-        
-        # 1. Count how many fields are still None
+    # Preserve the latest prediction through Streamlit reruns.
+    result_key = "tb_prediction_result"
+    answer_signature = tuple(answers.items())
+    saved_result = st.session_state.get(result_key)
+    if saved_result and saved_result.get("answers") != answer_signature:
+        st.session_state.pop(result_key, None)
+
+    if st.button('Run Prediction', key="tb_run_prediction"):
         unanswered_count = sum(1 for val in answers.values() if val is None)
-        
         if unanswered_count > 0:
-            st.error(f"⚠️ You have {unanswered_count} unanswered question(s). Please complete all fields before running the prediction.")
+            st.error(
+                f"⚠️ You have {unanswered_count} unanswered question(s). "
+                "Please complete all fields before running the prediction."
+            )
         else:
-            # 2. If everything is filled, build the DataFrame using the dictionary values
             input_data = pd.DataFrame([{
                 'two_weeks_fever': answers['fever'],
                 'coughing_blood': answers['cough_blood'],
                 'sputum_mixed_with_blood': answers['sputum'],
                 'night_sweats': answers['night_sweat'],
                 'chest_pain': answers['chest_pain'],
-                'back_pain': answers['back_pain'], 
+                'back_pain': answers['back_pain'],
                 'breath_shortness': answers['breath_shortness'],
                 'weight_loss': answers['weight_loss'],
                 'body_feels_tired': answers['body_feel_tired'],
@@ -468,45 +473,45 @@ def show_tb_page():
 
             with st.spinner('Analyzing patient data...'):
                 time.sleep(1.5)
+                pred = int(model.predict(input_data)[0])
+                prob = float(model.predict_proba(input_data)[0][1])
 
-                pred = model.predict(input_data)[0]
-                prob = model.predict_proba(input_data)[0][1]
+            st.session_state[result_key] = {
+                "answers": answer_signature,
+                "prediction": pred,
+                "probability": prob,
+            }
 
-                # Create side-by-side columns to bring the alert banner to the front
-                res_col1, res_col2 = st.columns([1, 5])
-
-                with res_col1:
-                    st.write("### Result:")
-
-                with res_col2:
-                    if pred == 1:
-                        st.error(f'High Risk of TB ({round(prob*100,2)}%)')
-                    else: 
-                        st.success(f'Low Risk of TB ({round(prob*100, 2)}%)')
-
-                # Recommendations sit cleanly below the header row
-                if pred == 1:
-                    st.warning("""
-                    Recommendation:
-                    Please visit a healthcare center for proper
-                    testing and medical consultation.
-                    """)
-                else:
-                    st.info("""
-                    Recommendation:
-                    Maintain healthy habits and regular medical
-                    checkups.
-                    """)
-                    
-            # From your Database setup
             save_prediction(
                 user_email=st.session_state['user'].email,
                 disease='Tuberculosis',
                 input_data=input_data.to_dict(orient='records')[0],
-                prediction=int(pred),
-                probability=float(prob)
+                prediction=pred,
+                probability=prob
             )
 
+    # Always render the saved result, even after unrelated reruns.
+    saved_result = st.session_state.get(result_key)
+    if saved_result and saved_result.get("answers") == answer_signature:
+        pred = saved_result["prediction"]
+        prob = saved_result["probability"]
 
-    
-    
+        res_col1, res_col2 = st.columns([1, 5])
+        with res_col1:
+            st.write("### Result:")
+        with res_col2:
+            if pred == 1:
+                st.error(f'High Risk of TB ({round(prob * 100, 2)}%)')
+            else:
+                st.success(f'Low Risk of TB ({round(prob * 100, 2)}%)')
+
+        if pred == 1:
+            st.warning(
+                "Recommendation: Please visit a healthcare center for "
+                "proper testing and medical consultation."
+            )
+        else:
+            st.info(
+                "Recommendation: Maintain healthy habits and regular "
+                "medical checkups."
+            )

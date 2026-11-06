@@ -6,7 +6,6 @@ from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 from cryptography.fernet import Fernet
-from streamlit_autorefresh import st_autorefresh
 
 from database import get_user_name, get_user_role, supabase
 from session_crypto import SESSION_LIFETIME_SECONDS, decrypt_session, encrypt_session
@@ -210,15 +209,3 @@ def restore_persistent_session():
         clear_persistent_session()
         st.rerun()
 
-    if st.session_state.get("user"):
-        st.html("""<style>
-            [data-testid="stMainBlockContainer"] {
-                padding-top: 0 !important;
-                margin-top: -1rem !important;
-            }
-        </style>""")
-        with st.container(key="dmd_session_timer"):
-            st_autorefresh(
-                interval=60_000,
-                key="persistent_session_expiry_check"
-            )

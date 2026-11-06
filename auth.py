@@ -118,11 +118,8 @@ def can_request_otp():
     return (time.time() - st.session_state.otp_timer_start) >= st.session_state.otp_cooldown
 
 
-def __getattr__(name):
-    if name == "logout":
-        restore_persistent_session()
-        return _logout
-
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+def logout():
+    """Log out the current user and clear the persistent browser session."""
+    _logout()
 
 

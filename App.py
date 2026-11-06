@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(page_title="Disease Prediction App", layout="wide", initial_sidebar_state="collapsed")
 
 import time
-from persistent_session import remember_disease
+from persistent_session import remember_disease, restore_persistent_session
 from nav.tb_page import show_tb_page 
 from nav.hiv_page import show_hiv_page
 from auth import sign_up, login, logout, send_reset_otp, verify_otp_and_update_password,can_request_otp
@@ -13,6 +13,9 @@ from streamlit_extras.stylable_container import stylable_container
 import qrcode
 from io import BytesIO
 import streamlit.components.v1 as components
+
+# Validate/restore the login on each Streamlit run without a periodic auto-refresh.
+restore_persistent_session()
 
 
 
