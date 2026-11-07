@@ -6,11 +6,21 @@ from persistent_session import restore_persistent_session
 
 restore_persistent_session()
 
-DARK_MODE = True
-CHART_TEXT = "#f4faf7"
-CHART_GRID = "rgba(190,214,204,.22)"
-CHART_GREEN = "#20e875"
-CHART_GREEN_LIGHT = "#8cf59b"
+try:
+    active_theme_type = st.context.theme.type
+except Exception:
+    active_theme_type = None
+
+if active_theme_type in ("light", "dark"):
+    DARK_MODE = active_theme_type == "dark"
+else:
+    theme_base = st.get_option("theme.base") or "light"
+    DARK_MODE = str(theme_base).lower() == "dark"
+
+CHART_TEXT = "#f4faf7" if DARK_MODE else "#24352d"
+CHART_GRID = "rgba(190,214,204,.22)" if DARK_MODE else "rgba(54,82,66,.16)"
+CHART_GREEN = "#20e875" if DARK_MODE else "#07543d"
+CHART_GREEN_LIGHT = "#8cf59b" if DARK_MODE else "#68b77a"
 CHART_CONFIG = {
     "displayModeBar": True,
     "displaylogo": False,
@@ -20,7 +30,7 @@ CHART_CONFIG = {
 
 def style_dashboard_chart(fig, height=None):
     layout = {
-        "template": "plotly_dark",
+        "template": "plotly_dark" if DARK_MODE else "plotly_white",
         "paper_bgcolor": "rgba(0,0,0,0)",
         "plot_bgcolor": "rgba(0,0,0,0)",
         "font": {"family": "Arial, sans-serif", "size": 12, "color": CHART_TEXT},
@@ -258,6 +268,184 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+if not DARK_MODE:
+    st.markdown(
+        """
+        <style>
+        html, body, .stApp, [data-testid="stAppViewContainer"],
+        [data-testid="stMain"], [data-testid="stMainBlockContainer"] {
+            background: #f5f2ed !important;
+            color: #18251f !important;
+        }
+        [data-testid="stHeader"] {
+            background: rgba(245,242,237,.96) !important;
+        }
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #063d32 0%, #03251f 100%) !important;
+            border-right: 1px solid rgba(10,55,40,.16) !important;
+        }
+        [data-testid="stSidebar"] * { color: #f5fbf7 !important; }
+        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+            color: #d7e8df !important;
+        }
+        .block-container {
+            max-width: 1500px;
+            padding-top: 2rem;
+            padding-bottom: 3rem;
+        }
+        h1, h2, h3, h4, h5, h6,
+        [data-testid="stMarkdownContainer"] h1,
+        [data-testid="stMarkdownContainer"] h2,
+        [data-testid="stMarkdownContainer"] h3,
+        [data-testid="stTitle"] {
+            color: #111d17 !important;
+            opacity: 1 !important;
+            letter-spacing: -.025em;
+        }
+        h1 { font-size: 2.15rem !important; font-weight: 800 !important; }
+        h2 { font-size: 1.45rem !important; font-weight: 750 !important; }
+        h3 { font-size: 1.15rem !important; font-weight: 750 !important; }
+        h4 { font-size: 1.08rem !important; font-weight: 750 !important; }
+        p, label, [data-testid="stMarkdownContainer"] p,
+        [data-testid="stCaptionContainer"] p, .stCaption {
+            color: #52645b !important;
+            opacity: 1 !important;
+        }
+        [data-testid="stCaptionContainer"] p, .stCaption {
+            color: #839189 !important;
+        }
+        [data-testid="stVerticalBlockBorderWrapper"],
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: linear-gradient(145deg, #ffffff 0%, #faf8f4 100%) !important;
+            border: 1px solid #e5ded5 !important;
+            border-radius: 17px !important;
+            box-shadow: 0 7px 22px rgba(48,54,46,.09) !important;
+            overflow: visible !important;
+        }
+        [data-testid="stMetric"] { padding: .8rem .65rem; }
+        [data-testid="stMetricLabel"],
+        [data-testid="stMetricLabel"] *,
+        [data-testid="stMetricLabel"] p {
+            color: #263a30 !important;
+            opacity: 1 !important;
+            font-size: .96rem !important;
+            font-weight: 750 !important;
+        }
+        [data-testid="stMetricValue"],
+        [data-testid="stMetricValue"] *,
+        [data-testid="stMetricValue"] div {
+            color: #13231b !important;
+            opacity: 1 !important;
+            font-weight: 850 !important;
+            font-size: 2.45rem !important;
+        }
+        [data-testid="stMetricDelta"] { font-weight: 800 !important; }
+        [data-testid="stMetric"] [data-testid="stTooltipIcon"] { display: none !important; }
+        .dash-eyebrow {
+            color: #08734a !important;
+            font-size: .78rem;
+            font-weight: 850;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: .35rem;
+        }
+        .dash-subtitle {
+            color: #53665c !important;
+            font-size: .98rem;
+            margin-top: 0;
+            margin-bottom: 1.25rem;
+        }
+        .dash-section-note {
+            color: #53665c !important;
+            font-size: .85rem;
+            margin-top: -.55rem;
+            margin-bottom: .8rem;
+        }
+        .dash-pill {
+            display:inline-block;
+            padding:4px 10px;
+            border-radius:999px;
+            font-size:12px;
+            font-weight:700;
+            white-space:nowrap;
+        }
+        .dash-positive { background:#e1f3e7; color:#07543d; }
+        .dash-negative { background:#fde8e8; color:#a52c35; }
+        .dash-neutral { background:#edf1ee; color:#46564d; }
+        [data-testid="stSelectbox"] label,
+        [data-testid="stTextInput"] label,
+        [data-testid="stDateInput"] label {
+            color: #34483d !important;
+            font-weight: 650 !important;
+        }
+        [data-testid="stSelectbox"] > div > div,
+        [data-testid="stTextInput"] > div > div,
+        [data-testid="stDateInput"] > div > div {
+            background: #ffffff !important;
+            border: 1px solid #ddd5cb !important;
+            border-radius: 10px !important;
+            color: #1d2b23 !important;
+        }
+        [data-testid="stSelectbox"] *, [data-testid="stTextInput"] input {
+            color: #1d2b23 !important;
+        }
+        [data-testid="stDataFrame"], [data-testid="stTable"] {
+            border: 1px solid #e2dbd2 !important;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+        }
+        div[data-testid="stDownloadButton"] button,
+        div[data-testid="stButton"] button {
+            border-radius: 10px;
+            border: 1px solid #08734a;
+            font-weight: 750;
+            background: #087b4d;
+            color: #ffffff !important;
+        }
+        div[data-testid="stDownloadButton"] button:hover,
+        div[data-testid="stButton"] button:hover {
+            background: #09945b;
+            border-color: #0a6b45;
+            color: #ffffff !important;
+        }
+        hr { border-color: #e2dbd2 !important; }
+        .js-plotly-plot, .js-plotly-plot .plot-container,
+        .js-plotly-plot .svg-container, .js-plotly-plot .main-svg {
+            background: transparent !important;
+        }
+        .js-plotly-plot .xtick text,
+        .js-plotly-plot .ytick text,
+        .js-plotly-plot .legendtext,
+        .js-plotly-plot .gtitle,
+        .js-plotly-plot .annotation-text,
+        .js-plotly-plot .infolayer text {
+            fill: #34483d !important;
+        }
+        .js-plotly-plot .modebar,
+        .js-plotly-plot .modebar-container,
+        .js-plotly-plot .modebar-group,
+        .js-plotly-plot .modebar-btn {
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+        .js-plotly-plot .modebar-btn path { fill: #53665c !important; }
+        .js-plotly-plot .modebar-btn:hover path { fill: #087b4d !important; }
+        @media (max-width: 900px) {
+            .block-container { padding: 1.2rem 1rem 2rem !important; }
+            h1 { font-size: 1.8rem !important; }
+            [data-testid="stVerticalBlockBorderWrapper"] { border-radius: 13px !important; }
+        }
+        @media (max-width: 640px) {
+            .block-container { padding: .9rem .7rem 1.5rem !important; }
+            h1 { font-size: 1.55rem !important; }
+            [data-testid="stMetricValue"] div { font-size: 1.9rem !important; }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 st.markdown('<div class="dash-eyebrow">Disease Prediction System · Administration</div>', unsafe_allow_html=True)
