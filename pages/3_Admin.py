@@ -7,8 +7,10 @@ from persistent_session import restore_persistent_session
 restore_persistent_session()
 
 DARK_MODE = st.get_option("theme.base") == "dark"
-CHART_TEXT = "#f1f5f2" if DARK_MODE else "#34443c"
-CHART_GRID = "rgba(226,239,231,.18)" if DARK_MODE else "#e7ece8"
+CHART_TEXT = "#f4fbf7" if DARK_MODE else "#263a31"
+CHART_GRID = "rgba(197,224,208,.20)" if DARK_MODE else "#e1e9e3"
+CHART_GREEN = "#20e875" if DARK_MODE else "#087653"
+CHART_GREEN_LIGHT = "#8cf59b" if DARK_MODE else "#68b878"
 CHART_CONFIG = {
     "displayModeBar": True,
     "displaylogo": False,
@@ -32,95 +34,88 @@ feedback_df = pd.DataFrame(feedback_data) if feedback_data else pd.DataFrame()
 
 
 st.markdown(
-    """
+    f"""
     <style>
-    :root {
-        --dash-green: #087653;
-        --dash-green-dark: #064b3b;
-        --dash-bg: #f6f4ef;
-        --dash-card: #fffdfa;
-        --dash-text: #17231f;
-        --dash-muted: #64756c;
-        --dash-border: #e2e6e1;
-        --dash-metric-value: #173d30;
-        --dash-metric-label: #455b50;
-        --dash-caption: #64756c;
-        --dash-grid: #e7ece8;
-    }
-    html[data-theme="dark"] {
-        --dash-bg: #0b1512;
-        --dash-card: #14221d;
-        --dash-text: #f4faf6;
-        --dash-muted: #c0d0c7;
-        --dash-border: #30463b;
-        --dash-metric-value: #f5fff8;
-        --dash-metric-label: #e0eee6;
-        --dash-caption: #c2d3c9;
-        --dash-grid: #344b40;
-    }
-
-    .stApp { background: var(--dash-bg); }
-    [data-testid="stHeader"] { background: var(--dash-bg); }
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #063d32 0%, #032c25 100%);
-        border-right: 1px solid rgba(255,255,255,.08);
-    }
-    [data-testid="stSidebar"] * { color: #f5fbf7; }
-    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: #d7e8df; }
-    [data-testid="stSidebar"] [data-testid="stAlert"] { background: rgba(255,255,255,.10); }
-
-    .block-container { max-width: 1500px; padding-top: 2.0rem; padding-bottom: 3rem; }
-    h1, h2, h3 { color: var(--dash-text); letter-spacing: -.025em; }
-    h1 { font-size: 2.15rem !important; font-weight: 750 !important; margin-bottom: .15rem !important; }
-    h2 { font-size: 1.35rem !important; font-weight: 700 !important; }
-    h3 { font-size: 1.05rem !important; font-weight: 700 !important; }
-    p, label, .stCaption { color: var(--dash-muted); }
-    html[data-theme="dark"] .stApp { background: var(--dash-bg); }
-    html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3,
-    html[data-theme="dark"] [data-testid="stMarkdownContainer"] p { color: var(--dash-text); }
-    html[data-theme="dark"] [data-testid="stSelectbox"] label,
-    html[data-theme="dark"] [data-testid="stTextInput"] label { color: #e4f2e9 !important; }
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        background: var(--dash-card);
-        border: 1px solid var(--dash-border);
-        border-radius: 17px;
-        box-shadow: 0 5px 18px rgba(34,48,40,.07);
-    }
-    [data-testid="stMetric"] { padding: .55rem .35rem; }
-    [data-testid="stMetricLabel"] p { color: var(--dash-metric-label) !important; font-size: .94rem !important; font-weight: 700 !important; }
-    [data-testid="stMetricValue"] { color: var(--dash-metric-value) !important; font-weight: 800 !important; font-size: 2.35rem !important; }
-    [data-testid="stMetricDelta"] { font-weight: 700 !important; }
-    [data-testid="stCaptionContainer"] p, .stCaption { color: var(--dash-caption) !important; }
-    html[data-theme="dark"] [data-testid="stVerticalBlockBorderWrapper"] {
-        background: #14241e !important;
-        border-color: #385346 !important;
-        box-shadow: 0 8px 24px rgba(0,0,0,.22);
-    }
-    html[data-theme="dark"] [data-testid="stMetricValue"] { color: #ffffff !important; }
-    html[data-theme="dark"] [data-testid="stMetricLabel"] p { color: #e4f2e9 !important; }
-    html[data-theme="dark"] [data-testid="stCaptionContainer"] p { color: #c5d8cc !important; }
-    .js-plotly-plot .modebar { background: transparent !important; }
-    .js-plotly-plot .modebar-btn path { fill: var(--dash-muted) !important; }
-    .js-plotly-plot .modebar-btn:hover path { fill: var(--dash-green) !important; }
-    [data-testid="stSelectbox"] > div > div,
-    [data-testid="stTextInput"] > div > div { border-radius: 10px; }
-    .dash-eyebrow { color: var(--dash-green); font-size: .78rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .35rem; }
-    .dash-subtitle { color: var(--dash-muted); font-size: .98rem; margin-top: 0; margin-bottom: 1.25rem; }
-    .dash-section-note { color: var(--dash-muted); font-size: .85rem; margin-top: -.55rem; margin-bottom: .8rem; }
-    .dash-pill { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; white-space:nowrap; }
-    .dash-positive { background:#e5f3e8; color:#176b39; }
-    .dash-negative { background:#fce8e6; color:#a33b35; }
-    .dash-neutral { background:#edf0ed; color:#526158; }
-    div[data-testid="stDownloadButton"] button, div[data-testid="stButton"] button {
-        border-radius: 10px; border: 1px solid #d7e2db; font-weight: 650;
-    }
-    div[data-testid="stDownloadButton"] button { background: #064b3b; color: white; }
-    div[data-testid="stDownloadButton"] button:hover { background: #04382e; color: white; border-color:#04382e; }
-    hr { border-color: var(--dash-border); }
-    @media (max-width: 800px) {
-        .block-container { padding: 1.2rem 1rem 2rem; }
-        h1 { font-size: 1.7rem !important; }
-    }
+    :root {{
+        --dash-green: {CHART_GREEN};
+        --dash-green-dark: {"#00b95c" if DARK_MODE else "#064b3b"};
+        --dash-bg: {"#080f11" if DARK_MODE else "#f6f4ef"};
+        --dash-card: {"#10191b" if DARK_MODE else "#fffdfa"};
+        --dash-text: {"#f7fcf9" if DARK_MODE else "#17231f"};
+        --dash-muted: {"#c5d6ce" if DARK_MODE else "#64756c"};
+        --dash-border: {"#304044" if DARK_MODE else "#e2e6e1"};
+        --dash-metric-value: {"#ffffff" if DARK_MODE else "#173d30"};
+        --dash-metric-label: {"#f1faf5" if DARK_MODE else "#455b50"};
+        --dash-caption: {"#c4d5cc" if DARK_MODE else "#64756c"};
+        --dash-grid: {"#334348" if DARK_MODE else "#e7ece8"};
+    }}
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] {{
+        background: var(--dash-bg) !important; color: var(--dash-text) !important;
+    }}
+    [data-testid="stHeader"] {{ background: var(--dash-bg) !important; }}
+    [data-testid="stSidebar"] {{
+        background: linear-gradient(180deg, #063d32 0%, #03251f 100%) !important;
+        border-right: 1px solid rgba(255,255,255,.10);
+    }}
+    [data-testid="stSidebar"] * {{ color: #f5fbf7; }}
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {{ color: #d7e8df; }}
+    [data-testid="stSidebar"] [data-testid="stAlert"] {{ background: rgba(255,255,255,.10); }}
+    .block-container {{ max-width: 1500px; padding-top: 2rem; padding-bottom: 3rem; }}
+    h1, h2, h3, [data-testid="stMarkdownContainer"] h1,
+    [data-testid="stMarkdownContainer"] h2, [data-testid="stMarkdownContainer"] h3,
+    [data-testid="stTitle"] {{ color: var(--dash-text) !important; letter-spacing: -.025em; }}
+    h1 {{ font-size: 2.15rem !important; font-weight: 750 !important; margin-bottom: .15rem !important; }}
+    h2 {{ font-size: 1.35rem !important; font-weight: 700 !important; }}
+    h3 {{ font-size: 1.05rem !important; font-weight: 700 !important; }}
+    p, label, [data-testid="stMarkdownContainer"] p,
+    [data-testid="stCaptionContainer"] p, .stCaption {{ color: var(--dash-muted) !important; }}
+    [data-testid="stVerticalBlockBorderWrapper"] {{
+        background: var(--dash-card) !important; border: 1px solid var(--dash-border) !important;
+        border-radius: 17px !important;
+        box-shadow: {"0 10px 28px rgba(0,0,0,.24)" if DARK_MODE else "0 5px 18px rgba(34,48,40,.07)"} !important;
+    }}
+    [data-testid="stMetric"] {{ padding: .65rem .45rem; }}
+    [data-testid="stMetricLabel"] p {{
+        color: var(--dash-metric-label) !important; font-size: .94rem !important; font-weight: 750 !important;
+    }}
+    [data-testid="stMetricValue"], [data-testid="stMetricValue"] div {{
+        color: var(--dash-metric-value) !important; font-weight: 850 !important; font-size: 2.4rem !important;
+    }}
+    [data-testid="stMetricDelta"] {{ font-weight: 750 !important; }}
+    [data-testid="stCaptionContainer"] p, .stCaption {{ color: var(--dash-caption) !important; }}
+    [data-testid="stMetric"] [data-testid="stTooltipIcon"] {{ display: none !important; }}
+    .js-plotly-plot, .js-plotly-plot .plot-container,
+    .js-plotly-plot .svg-container {{ background: transparent !important; }}
+    .js-plotly-plot .modebar, .js-plotly-plot .modebar-container,
+    .js-plotly-plot .modebar-group, .js-plotly-plot .modebar-btn {{
+        background: transparent !important; border: 0 !important; box-shadow: none !important;
+    }}
+    .js-plotly-plot .modebar-btn path {{
+        fill: {"#d8e9df" if DARK_MODE else "#53675c"} !important;
+    }}
+    .js-plotly-plot .modebar-btn:hover path {{ fill: var(--dash-green) !important; }}
+    [data-testid="stSelectbox"] > div > div, [data-testid="stTextInput"] > div > div {{ border-radius: 10px; }}
+    [data-testid="stSelectbox"] label, [data-testid="stTextInput"] label {{ color: var(--dash-metric-label) !important; }}
+    .dash-eyebrow {{
+        color: var(--dash-green); font-size: .78rem; font-weight: 800;
+        letter-spacing: .12em; text-transform: uppercase; margin-bottom: .35rem;
+    }}
+    .dash-subtitle {{ color: var(--dash-muted); font-size: .98rem; margin-top: 0; margin-bottom: 1.25rem; }}
+    .dash-section-note {{ color: var(--dash-muted); font-size: .85rem; margin-top: -.55rem; margin-bottom: .8rem; }}
+    .dash-pill {{ display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; white-space:nowrap; }}
+    .dash-positive {{ background:#e5f3e8; color:#176b39; }}
+    .dash-negative {{ background:#fce8e6; color:#a33b35; }}
+    .dash-neutral {{ background:#edf0ed; color:#526158; }}
+    div[data-testid="stDownloadButton"] button, div[data-testid="stButton"] button {{
+        border-radius: 10px; border: 1px solid var(--dash-border); font-weight: 700;
+    }}
+    div[data-testid="stDownloadButton"] button {{ background: #087653; color: white; }}
+    div[data-testid="stDownloadButton"] button:hover {{ background: #00a85a; color: white; border-color:#00a85a; }}
+    hr {{ border-color: var(--dash-border); }}
+    @media (max-width: 800px) {{
+        .block-container {{ padding: 1.2rem 1rem 2rem; }}
+        h1 {{ font-size: 1.7rem !important; }}
+    }}
     </style>
     """,
     unsafe_allow_html=True,
@@ -194,7 +189,7 @@ with left:
             trend = trend.sort_values("_month_sort")
             fig = px.line(
                 trend, x="Month", y="Predictions", color="disease", markers=True,
-                color_discrete_map={"HIV": "#07513e", "HIV/AIDS": "#07513e", "Tuberculosis": "#68b878", "TB": "#68b878"},
+                color_discrete_map={"HIV": CHART_GREEN, "HIV/AIDS": CHART_GREEN, "Tuberculosis": CHART_GREEN_LIGHT, "TB": CHART_GREEN_LIGHT},
             )
             fig.update_traces(line=dict(width=3), marker=dict(size=7))
             fig.update_layout(
@@ -226,7 +221,7 @@ with right:
                 fig = px.pie(
                     names=outcome_labels, values=outcome_counts, hole=.68,
                     color=outcome_labels,
-                    color_discrete_map={"Positive": "#07513e", "Negative": "#78bd83", "Other / Unavailable": "#d8dfd9"},
+                    color_discrete_map={"Positive": CHART_GREEN, "Negative": CHART_GREEN_LIGHT, "Other / Unavailable": "#82938a"},
                 )
                 fig.update_traces(textinfo="percent", textposition="inside", hole=.68)
                 fig.update_layout(
@@ -291,7 +286,7 @@ if not filtered_df.empty:
                 if not grouped.empty:
                     fig = px.bar(
                         grouped, x="disease", y="Predictions", color="Outcome", barmode="group", text_auto=True,
-                        color_discrete_map={"Negative": "#78bd83", "Positive": "#07513e"},
+                        color_discrete_map={"Negative": CHART_GREEN_LIGHT, "Positive": CHART_GREEN},
                     )
                     fig.update_layout(height=320, margin=dict(l=8, r=8, t=10, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), legend_title_text="", xaxis_title=None, yaxis_title="Predictions", xaxis=dict(color=CHART_TEXT, linecolor=CHART_GRID), yaxis=dict(gridcolor=CHART_GRID, color=CHART_TEXT))
                     st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
@@ -306,7 +301,7 @@ if not filtered_df.empty:
                 daily_usage = chart_df.assign(Date=chart_df["created_at"].dt.date).groupby("Date").size().reset_index(name="Predictions")
                 daily_usage = daily_usage.sort_values("Date").tail(30)
                 fig = px.area(daily_usage, x="Date", y="Predictions")
-                fig.update_traces(line=dict(color="#07513e", width=3), fillcolor="rgba(104,184,120,.18)")
+                fig.update_traces(line=dict(color=CHART_GREEN, width=3), fillcolor="rgba(32,232,117,.20)" if DARK_MODE else "rgba(104,184,120,.18)")
                 fig.update_layout(height=320, margin=dict(l=8, r=8, t=10, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), xaxis_title=None, yaxis_title="Predictions", xaxis=dict(color=CHART_TEXT, linecolor=CHART_GRID), yaxis=dict(gridcolor=CHART_GRID, color=CHART_TEXT))
                 st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
             else:
@@ -317,7 +312,7 @@ if not filtered_df.empty:
         if "user_email" in filtered_df.columns:
             user_activity = filtered_df["user_email"].value_counts().head(10).rename_axis("User").reset_index(name="Predictions")
             fig = px.bar(user_activity, x="Predictions", y="User", orientation="h", text_auto=True)
-            fig.update_traces(marker_color="#28775e")
+            fig.update_traces(marker_color=CHART_GREEN)
             fig.update_layout(height=max(260, 38 * len(user_activity)), margin=dict(l=8, r=8, t=8, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), xaxis=dict(title="Predictions", gridcolor=CHART_GRID, color=CHART_TEXT), yaxis=dict(title=None, autorange="reversed", color=CHART_TEXT))
             st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
 else:
