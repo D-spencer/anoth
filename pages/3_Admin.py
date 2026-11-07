@@ -4,8 +4,17 @@ from database import get_all_predictions, get_all_feedback
 import plotly.express as px
 from persistent_session import restore_persistent_session
 
-# Keep the existing authentication and persistent-session behaviour unchanged.
 restore_persistent_session()
+
+DARK_MODE = st.get_option("theme.base") == "dark"
+CHART_TEXT = "#f1f5f2" if DARK_MODE else "#34443c"
+CHART_GRID = "rgba(226,239,231,.18)" if DARK_MODE else "#e7ece8"
+CHART_CONFIG = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "responsive": True,
+    "scrollZoom": True,
+}
 
 if st.session_state.get("user") is None:
     st.warning("You have been logged out. Please log in again from the home page.")
@@ -16,29 +25,42 @@ if st.session_state.get("role") != "admin":
     st.error("Access denied. Admins only.")
     st.stop()
 
-# Load the same database records used by the previous dashboard.
 data = get_all_predictions()
 df = pd.DataFrame(data) if data else pd.DataFrame()
 feedback_data = get_all_feedback()
 feedback_df = pd.DataFrame(feedback_data) if feedback_data else pd.DataFrame()
 
-# ---------------------------- Dashboard styling ----------------------------
+
 st.markdown(
     """
     <style>
     :root {
-        --dash-green: #064b3b;
-        --dash-green-dark: #032f27;
-        --dash-green-light: #e4f1eb;
+        --dash-green: #087653;
+        --dash-green-dark: #064b3b;
         --dash-bg: #f6f4ef;
         --dash-card: #fffdfa;
         --dash-text: #17231f;
-        --dash-muted: #718078;
-        --dash-border: #e8e4dc;
+        --dash-muted: #64756c;
+        --dash-border: #e2e6e1;
+        --dash-metric-value: #173d30;
+        --dash-metric-label: #455b50;
+        --dash-caption: #64756c;
+        --dash-grid: #e7ece8;
+    }
+    html[data-theme="dark"] {
+        --dash-bg: #0b1512;
+        --dash-card: #14221d;
+        --dash-text: #f4faf6;
+        --dash-muted: #c0d0c7;
+        --dash-border: #30463b;
+        --dash-metric-value: #f5fff8;
+        --dash-metric-label: #e0eee6;
+        --dash-caption: #c2d3c9;
+        --dash-grid: #344b40;
     }
 
     .stApp { background: var(--dash-bg); }
-    [data-testid="stHeader"] { background: rgba(246,244,239,.92); }
+    [data-testid="stHeader"] { background: var(--dash-bg); }
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #063d32 0%, #032c25 100%);
         border-right: 1px solid rgba(255,255,255,.08);
@@ -53,20 +75,38 @@ st.markdown(
     h2 { font-size: 1.35rem !important; font-weight: 700 !important; }
     h3 { font-size: 1.05rem !important; font-weight: 700 !important; }
     p, label, .stCaption { color: var(--dash-muted); }
+    html[data-theme="dark"] .stApp { background: var(--dash-bg); }
+    html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3,
+    html[data-theme="dark"] [data-testid="stMarkdownContainer"] p { color: var(--dash-text); }
+    html[data-theme="dark"] [data-testid="stSelectbox"] label,
+    html[data-theme="dark"] [data-testid="stTextInput"] label { color: #e4f2e9 !important; }
     [data-testid="stVerticalBlockBorderWrapper"] {
         background: var(--dash-card);
         border: 1px solid var(--dash-border);
         border-radius: 17px;
-        box-shadow: 0 5px 18px rgba(34,48,40,.045);
+        box-shadow: 0 5px 18px rgba(34,48,40,.07);
     }
-    [data-testid="stMetric"] { padding: .35rem .2rem; }
-    [data-testid="stMetricLabel"] p { color: #64756c !important; font-size: .88rem !important; font-weight: 600 !important; }
-    [data-testid="stMetricValue"] { color: var(--dash-text) !important; font-weight: 750 !important; }
+    [data-testid="stMetric"] { padding: .55rem .35rem; }
+    [data-testid="stMetricLabel"] p { color: var(--dash-metric-label) !important; font-size: .94rem !important; font-weight: 700 !important; }
+    [data-testid="stMetricValue"] { color: var(--dash-metric-value) !important; font-weight: 800 !important; font-size: 2.35rem !important; }
+    [data-testid="stMetricDelta"] { font-weight: 700 !important; }
+    [data-testid="stCaptionContainer"] p, .stCaption { color: var(--dash-caption) !important; }
+    html[data-theme="dark"] [data-testid="stVerticalBlockBorderWrapper"] {
+        background: #14241e !important;
+        border-color: #385346 !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,.22);
+    }
+    html[data-theme="dark"] [data-testid="stMetricValue"] { color: #ffffff !important; }
+    html[data-theme="dark"] [data-testid="stMetricLabel"] p { color: #e4f2e9 !important; }
+    html[data-theme="dark"] [data-testid="stCaptionContainer"] p { color: #c5d8cc !important; }
+    .js-plotly-plot .modebar { background: transparent !important; }
+    .js-plotly-plot .modebar-btn path { fill: var(--dash-muted) !important; }
+    .js-plotly-plot .modebar-btn:hover path { fill: var(--dash-green) !important; }
     [data-testid="stSelectbox"] > div > div,
     [data-testid="stTextInput"] > div > div { border-radius: 10px; }
-    .dash-eyebrow { color: #638074; font-size: .78rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .35rem; }
-    .dash-subtitle { color: #78847e; font-size: .98rem; margin-top: 0; margin-bottom: 1.25rem; }
-    .dash-section-note { color: #7a877f; font-size: .85rem; margin-top: -.55rem; margin-bottom: .8rem; }
+    .dash-eyebrow { color: var(--dash-green); font-size: .78rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .35rem; }
+    .dash-subtitle { color: var(--dash-muted); font-size: .98rem; margin-top: 0; margin-bottom: 1.25rem; }
+    .dash-section-note { color: var(--dash-muted); font-size: .85rem; margin-top: -.55rem; margin-bottom: .8rem; }
     .dash-pill { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; white-space:nowrap; }
     .dash-positive { background:#e5f3e8; color:#176b39; }
     .dash-negative { background:#fce8e6; color:#a33b35; }
@@ -76,7 +116,7 @@ st.markdown(
     }
     div[data-testid="stDownloadButton"] button { background: #064b3b; color: white; }
     div[data-testid="stDownloadButton"] button:hover { background: #04382e; color: white; border-color:#04382e; }
-    hr { border-color: #e7e4dc; }
+    hr { border-color: var(--dash-border); }
     @media (max-width: 800px) {
         .block-container { padding: 1.2rem 1rem 2rem; }
         h1 { font-size: 1.7rem !important; }
@@ -86,13 +126,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------------------------- Header ----------------------------
+
 st.markdown('<div class="dash-eyebrow">Disease Prediction System · Administration</div>', unsafe_allow_html=True)
 st.title("Admin Dashboard")
 st.markdown("<div class='dash-subtitle'>Overview of predictions, disease activity and system usage</div>", unsafe_allow_html=True)
 st.caption(f"Signed in as {user_email}")
 
-# ---------------------------- Metrics ----------------------------
+
 total_predictions = len(df)
 total_users = df["user_email"].nunique() if not df.empty and "user_email" in df.columns else 0
 tb_count = len(df[df["disease"].astype(str).str.lower().isin(["tb", "tuberculosis"])]) if not df.empty and "disease" in df.columns else 0
@@ -110,10 +150,10 @@ metric_items = [
 for col, (label, value, help_text) in zip(metric_cols, metric_items):
     with col:
         with st.container(border=True):
-            st.metric(label, f"{value:,}", help=help_text)
+            st.metric(label, f"{value:,}")
             st.caption(help_text)
 
-# ---------------------------- Filters ----------------------------
+
 st.markdown("### Explore Prediction Records")
 filter_cols = st.columns([1, 1, 2], gap="medium")
 with filter_cols[0]:
@@ -133,13 +173,12 @@ if not filtered_df.empty and disease_filter != "ALL" and "disease" in filtered_d
 if not filtered_df.empty and user_filter != "ALL" and "user_email" in filtered_df.columns:
     filtered_df = filtered_df[filtered_df["user_email"] == user_filter]
 
-# Prepare dates once for the dashboard's charts and recent activity.
 chart_df = filtered_df.copy()
 if not chart_df.empty and "created_at" in chart_df.columns:
     chart_df["created_at"] = pd.to_datetime(chart_df["created_at"], errors="coerce", utc=True)
     chart_df = chart_df.dropna(subset=["created_at"])
 
-# ---------------------------- Main analytics row ----------------------------
+
 st.markdown("### Prediction Analytics")
 left, right = st.columns([1.45, 1], gap="medium")
 
@@ -161,11 +200,11 @@ with left:
             fig.update_layout(
                 height=330, margin=dict(l=8, r=8, t=12, b=8),
                 paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#526158"), legend_title_text="Disease",
-                xaxis=dict(title=None, showgrid=False),
-                yaxis=dict(title="Number of predictions", gridcolor="#ecefe9", zeroline=False),
+                font=dict(color=CHART_TEXT), legend_title_text="Disease",
+                xaxis=dict(title=None, showgrid=False, color=CHART_TEXT, linecolor=CHART_GRID),
+                yaxis=dict(title="Number of predictions", gridcolor=CHART_GRID, zeroline=False, color=CHART_TEXT),
             )
-            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+            st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
         else:
             st.info("Prediction trend data will appear here when records are available.")
 
@@ -193,16 +232,16 @@ with right:
                 fig.update_layout(
                     height=330, margin=dict(l=8, r=8, t=8, b=8),
                     paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                    font=dict(color="#526158"), legend=dict(orientation="h", y=-.08, x=.5, xanchor="center"),
-                    annotations=[dict(text=f"{sum(outcome_counts):,}<br><span style='font-size:12px'>Total</span>", x=.5, y=.5, showarrow=False, font=dict(size=21, color="#17231f"))],
+                    font=dict(color=CHART_TEXT), legend=dict(orientation="h", y=-.08, x=.5, xanchor="center", font=dict(color=CHART_TEXT)),
+                    annotations=[dict(text=f"{sum(outcome_counts):,}<br><span style='font-size:12px'>Total</span>", x=.5, y=.5, showarrow=False, font=dict(size=21, color=CHART_TEXT))],
                 )
-                st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+                st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
             else:
                 st.info("No classified prediction outcomes are available.")
         else:
             st.info("Prediction outcome data will appear here when records are available.")
 
-# ---------------------------- Disease breakdown and recent predictions ----------------------------
+
 st.markdown("### Activity Overview")
 left, right = st.columns([1, 1.2], gap="medium")
 with left:
@@ -238,7 +277,7 @@ with right:
         else:
             st.info("No recent predictions match the selected filters.")
 
-# ---------------------------- Additional existing analytics ----------------------------
+
 st.markdown("### Detailed Analytics")
 if not filtered_df.empty:
     detail_left, detail_right = st.columns(2, gap="medium")
@@ -254,8 +293,8 @@ if not filtered_df.empty:
                         grouped, x="disease", y="Predictions", color="Outcome", barmode="group", text_auto=True,
                         color_discrete_map={"Negative": "#78bd83", "Positive": "#07513e"},
                     )
-                    fig.update_layout(height=320, margin=dict(l=8, r=8, t=10, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color="#526158"), legend_title_text="", xaxis_title=None, yaxis_title="Predictions", yaxis=dict(gridcolor="#ecefe9"))
-                    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+                    fig.update_layout(height=320, margin=dict(l=8, r=8, t=10, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), legend_title_text="", xaxis_title=None, yaxis_title="Predictions", xaxis=dict(color=CHART_TEXT, linecolor=CHART_GRID), yaxis=dict(gridcolor=CHART_GRID, color=CHART_TEXT))
+                    st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
                 else:
                     st.info("No outcome breakdown is available.")
             else:
@@ -268,8 +307,8 @@ if not filtered_df.empty:
                 daily_usage = daily_usage.sort_values("Date").tail(30)
                 fig = px.area(daily_usage, x="Date", y="Predictions")
                 fig.update_traces(line=dict(color="#07513e", width=3), fillcolor="rgba(104,184,120,.18)")
-                fig.update_layout(height=320, margin=dict(l=8, r=8, t=10, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color="#526158"), xaxis_title=None, yaxis_title="Predictions", yaxis=dict(gridcolor="#ecefe9"))
-                st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+                fig.update_layout(height=320, margin=dict(l=8, r=8, t=10, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), xaxis_title=None, yaxis_title="Predictions", xaxis=dict(color=CHART_TEXT, linecolor=CHART_GRID), yaxis=dict(gridcolor=CHART_GRID, color=CHART_TEXT))
+                st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
             else:
                 st.info("Daily usage data is not available.")
 
@@ -279,12 +318,12 @@ if not filtered_df.empty:
             user_activity = filtered_df["user_email"].value_counts().head(10).rename_axis("User").reset_index(name="Predictions")
             fig = px.bar(user_activity, x="Predictions", y="User", orientation="h", text_auto=True)
             fig.update_traces(marker_color="#28775e")
-            fig.update_layout(height=max(260, 38 * len(user_activity)), margin=dict(l=8, r=8, t=8, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color="#526158"), xaxis=dict(title="Predictions", gridcolor="#ecefe9"), yaxis=dict(title=None, autorange="reversed"))
-            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+            fig.update_layout(height=max(260, 38 * len(user_activity)), margin=dict(l=8, r=8, t=8, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), xaxis=dict(title="Predictions", gridcolor=CHART_GRID, color=CHART_TEXT), yaxis=dict(title=None, autorange="reversed", color=CHART_TEXT))
+            st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
 else:
     st.info("Detailed analytics will appear when prediction records match the selected filters.")
 
-# ---------------------------- Full prediction records and CSV export ----------------------------
+
 with st.container(border=True):
     st.markdown("#### All Prediction Records")
     st.caption(f"{len(filtered_df):,} record(s) match the current filters")
@@ -301,7 +340,7 @@ with st.container(border=True):
         use_container_width=False,
     )
 
-# ---------------------------- User feedback (existing search and pagination retained) ----------------------------
+
 st.markdown("### User Feedback")
 with st.container(border=True):
     st.caption(f"{total_feedback_count:,} feedback submission(s) received")
