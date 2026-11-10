@@ -33,13 +33,13 @@
 #     key="tb_card",
 #     css_styles="""
 #     {
-#         background: rgba(8,12,28,0.92);
+#         background: #ffffff;
 
 #         border-radius: 24px;
 
 #         padding: 32px;
 
-#         border: 1px solid rgba(120,119,198,0.18);
+#         border: 1px solid #e5e7eb;
 
 #         transition:
 #             box-shadow 0.3s ease,
@@ -48,7 +48,7 @@
 
 #     &:hover {
 
-#         border-color: rgba(180,120,255,0.35);
+#         border-color: #e8b6b6;
 
 #         box-shadow:
 #             0 0 18px rgba(0,140,255,0.18),
@@ -209,16 +209,16 @@
 #         key="tb_card",
 #         css_styles="""
 #         {
-#             background: rgba(8,12,28,0.92);
+#             background: #ffffff;
 #             border-radius: 24px;
 #             padding: 32px;
-#             border: 1px solid rgba(120,119,198,0.18);
+#             border: 1px solid #e5e7eb;
 #             transition:
 #                 box-shadow 0.3s ease,
 #                 border-color 0.3s ease;
 #         }
 #         &:hover {
-#             border-color: rgba(180,120,255,0.35);
+#             border-color: #e8b6b6;
 #             box-shadow:
 #                 0 0 18px rgba(0,140,255,0.18),
 #                 0 0 40px rgba(162,0,255,0.22);
@@ -358,7 +358,7 @@ def show_tb_page():
     #     unsafe_allow_html=True
     # )
     # st.title(':blue[Tuberculosis Prediction]', text_alignment="center")
-    st.title(":color[Tuberculosis Prediction]{foreground='white'}", text_alignment="center")
+    st.title("Tuberculosis Prediction", text_alignment="center")
     st.write("Fill in the questionnaire below.")
 
     # We will store answers in a dictionary to easily validate them
@@ -369,19 +369,18 @@ def show_tb_page():
         key="tb_card",
         css_styles="""
         {
-            background: rgba(8,12,28,0.92);
+            background: #ffffff;
             border-radius: 24px;
             padding: 32px;
-            border: 1px solid rgba(120,119,198,0.18);
+            border: 1px solid #e5e7eb;
             transition:
                 box-shadow 0.3s ease,
                 border-color 0.3s ease;
         }
         &:hover {
-            border-color: rgba(180,120,255,0.35);
+            border-color: #e8b6b6;
             box-shadow:
-                0 0 18px rgba(0,140,255,0.18),
-                0 0 40px rgba(162,0,255,0.22);
+                0 4px 14px rgba(25,35,45,0.06);
         }
         """
     ):
@@ -389,7 +388,7 @@ def show_tb_page():
         # =========================
         # GENERAL SYMPTOMS
         # =========================
-        st.subheader(":blue[General Symptoms]")
+        st.subheader("General Symptoms")
         st.markdown("<br>", unsafe_allow_html=True)
         col1, col2 = st.columns(2)
 
@@ -407,7 +406,7 @@ def show_tb_page():
         # =========================
         # RESPIRATORY SYMPTOMS
         # =========================
-        st.subheader(":blue[Respiratory Symptoms]")
+        st.subheader("Respiratory Symptoms")
         st.markdown("<br>", unsafe_allow_html=True)
         col1, col2 = st.columns(2)
 
@@ -425,7 +424,7 @@ def show_tb_page():
         # =========================
         # OTHER PHYSICAL SYMPTOMS
         # =========================
-        st.subheader(":blue[Other Physical Symptoms]")
+        st.subheader("Other Physical Symptoms")
         st.markdown("<br>", unsafe_allow_html=True)
         col1, col2 = st.columns(2)
 

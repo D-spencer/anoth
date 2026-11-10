@@ -199,6 +199,9 @@ def auth_page():
         layout="centered"
     )
 
+    # Keep the existing authentication-page styling isolated from the new app theme.
+    local_css("styles.css")
+
     # ---------------- CSS ----------------
     st.markdown("""
     <style>
@@ -672,7 +675,9 @@ def auth_page():
 
 def dashboard():
 
-   
+    # Apply the white-and-red healthcare theme only after authentication.
+    # Login, sign-up and password-recovery screens retain their existing design.
+    local_css("assets/healthcare.css")
 
     disease_options = ["Tuberculosis", "HIV/AIDS"]
 
@@ -736,13 +741,13 @@ def dashboard():
 
         div[data-element-to-style="stVerticalBlock"] > div {
             width: 240px;
-            background: rgba(15, 15, 35, 0.75);
+            background: #ffffff;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             padding: 14px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(25,35,45,.04);
         }
 
         /* ===========================
@@ -772,7 +777,7 @@ def dashboard():
         /* HIDE STREAMLIT ACTIVE STYLE */
         div[data-baseweb="button-group"] button[data-testid="stBaseButton-segmented_controlActive"] {
             background: transparent !important;
-            color: #7b2cff !important;
+            color: #c62828 !important;
         }
 
         /* SLIDING INDICATOR */
@@ -783,7 +788,7 @@ def dashboard():
             left: 4px;
             width: calc(50% - 4px);
             height: calc(100% - 8px);
-            background: rgba(123, 44, 255, 0.25);
+            background: rgba(198, 40, 40, 0.12);
             border-radius: 10px;
             transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
             z-index: 1;
@@ -796,7 +801,7 @@ def dashboard():
 
         /* HOVER */
         div[data-baseweb="button-group"] button:hover {
-            background: rgba(123, 44, 255, 0.08) !important;
+            background: rgba(198, 40, 40, 0.08) !important;
         }
         @media (max-width: 768px) {
             {
@@ -918,7 +923,7 @@ def dashboard():
         #             padding:10px;
         #             border:none;
         #             border-radius:10px;
-        #             background:#7b2cff;
+        #             background:#c62828;
         #             color:white;
         #             cursor:pointer;
         #             font-weight:600;
@@ -934,7 +939,7 @@ def dashboard():
                 padding:10px;
                 border:none;
                 border-radius:10px;
-                background:#7b2cff;
+                background:#c62828;
                 color:white;
                 cursor:pointer;
                 font-weight:600;
@@ -995,7 +1000,7 @@ def dashboard():
     st.divider()
     st.markdown("""
     <br><br>
-    <div style='text-align:center; color:white; opacity:0.7;'>
+    <div style='text-align:center; color:#68717b; opacity:1;'>
          PREEMPTIVE DIAGNOSIS OF CHRONIC DISEASE:
 TUBERCULOSIS And HIV/AIDS USING A QUESTIONNAIRE BASED MACHINE
 LEARNING APPROACE <br>
@@ -1028,9 +1033,6 @@ def local_css(file_name):
         )
 
 
-
-# ================= APPLY CSS =================
-local_css("styles.css")
 
   
 

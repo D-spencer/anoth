@@ -9,7 +9,7 @@ from streamlit_extras.stylable_container import stylable_container
 model = joblib.load('model/Hiv_model_v1.pkl')
 
 def show_hiv_page():
-    st.title(':blue[Hiv/Aids Prediction]', text_alignment="center")
+    st.title("HIV/AIDS Prediction", text_alignment="center")
     
     st.write("Fill in the questionnaire below.")
 
@@ -21,19 +21,18 @@ def show_hiv_page():
         key="hiv_card",
         css_styles="""
         {
-            background: rgba(8,12,28,0.92);
+            background: #ffffff;
             border-radius: 24px;
             padding: 32px;
-            border: 1px solid rgba(120,119,198,0.18);
+            border: 1px solid #e5e7eb;
             transition:
                 box-shadow 0.3s ease,
                 border-color 0.3s ease;
         }
         &:hover {
-            border-color: rgba(180,120,255,0.35);
+            border-color: #e8b6b6;
             box-shadow:
-                0 0 18px rgba(0,140,255,0.18),
-                0 0 40px rgba(162,0,255,0.22);
+                0 4px 14px rgba(25,35,45,0.06);
         }
         """
     ):

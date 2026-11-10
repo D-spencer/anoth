@@ -6,19 +6,12 @@ from persistent_session import restore_persistent_session
 
 restore_persistent_session()
 
-try:
-    _active_theme = st.context.theme.type
-except Exception:
-    _active_theme = None
-if _active_theme in ("light", "dark"):
-    DARK_MODE = _active_theme == "dark"
-else:
-    DARK_MODE = str(st.get_option("theme.base") or "light").lower() == "dark"
+from pathlib import Path
 
-CHART_TEXT = "#f4faf7" if DARK_MODE else "#24352d"
-CHART_GRID = "rgba(190,214,204,.22)" if DARK_MODE else "rgba(54,82,66,.16)"
-CHART_GREEN = "#20e875" if DARK_MODE else "#07543d"
-CHART_GREEN_LIGHT = "#8cf59b" if DARK_MODE else "#68b77a"
+CHART_TEXT = "#30343a"
+CHART_GRID = "rgba(65,75,85,.14)"
+CHART_GREEN = "#c62828"  # Retained variable name to avoid touching chart logic.
+CHART_GREEN_LIGHT = "#9aa3ad"
 CHART_CONFIG = {
     "displayModeBar": True,
     "displaylogo": False,
@@ -28,15 +21,15 @@ CHART_CONFIG = {
 
 def style_dashboard_chart(fig, height=None):
     layout = {
-        "template": "plotly_dark" if DARK_MODE else "plotly_white",
+        "template": "plotly_white",
         "paper_bgcolor": "rgba(0,0,0,0)",
         "plot_bgcolor": "rgba(0,0,0,0)",
         "font": {"family": "Arial, sans-serif", "size": 12, "color": CHART_TEXT},
         "legend": {"font": {"color": CHART_TEXT, "size": 12}},
         "hoverlabel": {
-            "bgcolor": "#172328" if DARK_MODE else "#ffffff",
-            "bordercolor": "#52676b" if DARK_MODE else "#d8ded8",
-            "font": {"color": "#ffffff" if DARK_MODE else "#24352d"},
+            "bgcolor": "#ffffff",
+            "bordercolor": "#e1e4e8",
+            "font": {"color": "#30343a"},
         },
         "margin": {"l": 12, "r": 12, "t": 12, "b": 12},
     }
@@ -78,11 +71,8 @@ feedback_data = get_all_feedback()
 feedback_df = pd.DataFrame(feedback_data) if feedback_data else pd.DataFrame()
 
 
-# Load exactly one theme stylesheet. The approved dark stylesheet is kept verbatim.
-from pathlib import Path
-
-_theme_css_name = "dark_mode.css" if DARK_MODE else "light_mode.css"
-_theme_css_path = Path(__file__).resolve().parent.parent / "assets" / _theme_css_name
+# Admin is part of the authenticated application and uses the same white/red theme.
+_theme_css_path = Path(__file__).resolve().parent.parent / "assets" / "healthcare.css"
 _theme_css = _theme_css_path.read_text(encoding="utf-8")
 st.markdown(f"<style>\n{_theme_css}\n</style>", unsafe_allow_html=True)
 
@@ -269,7 +259,7 @@ if not filtered_df.empty:
                 daily_usage = chart_df.assign(Date=chart_df["created_at"].dt.date).groupby("Date").size().reset_index(name="Predictions")
                 daily_usage = daily_usage.sort_values("Date").tail(30)
                 fig = px.area(daily_usage, x="Date", y="Predictions")
-                fig.update_traces(line=dict(color=CHART_GREEN, width=3), fillcolor="rgba(32,232,117,.20)" if DARK_MODE else "rgba(104,184,120,.18)")
+                fig.update_traces(line=dict(color=CHART_GREEN, width=3), fillcolor="rgba(198,40,40,.16)")
                 fig.update_layout(height=320, margin=dict(l=8, r=8, t=10, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), xaxis_title=None, yaxis_title="Predictions", xaxis=dict(color=CHART_TEXT, linecolor=CHART_GRID), yaxis=dict(gridcolor=CHART_GRID, color=CHART_TEXT))
                 style_dashboard_chart(fig)
                 st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)
@@ -281,7 +271,7 @@ if not filtered_df.empty:
         if "user_email" in filtered_df.columns:
             user_activity = filtered_df["user_email"].value_counts().head(10).rename_axis("User").reset_index(name="Predictions")
             fig = px.bar(user_activity, x="Predictions", y="User", orientation="h", text_auto=True)
-            fig.update_traces(marker_color=CHART_GREEN, marker_line_color=CHART_GREEN_LIGHT, marker_line_width=1, textposition="outside", textfont=dict(color="#ffffff", size=12))
+            fig.update_traces(marker_color=CHART_GREEN, marker_line_color=CHART_GREEN_LIGHT, marker_line_width=1, textposition="outside", textfont=dict(color="#30343a", size=12))
             fig.update_layout(height=max(260, 38 * len(user_activity)), margin=dict(l=8, r=8, t=8, b=8), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", font=dict(color=CHART_TEXT), xaxis=dict(title="Predictions", gridcolor=CHART_GRID, color=CHART_TEXT), yaxis=dict(title=None, autorange="reversed", color=CHART_TEXT), xaxis_rangemode="tozero")
             style_dashboard_chart(fig)
             st.plotly_chart(fig, use_container_width=True, config=CHART_CONFIG)

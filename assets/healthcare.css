@@ -1,0 +1,102 @@
+/* Professional white-and-red healthcare theme.
+   Loaded only on authenticated application pages; authentication screens are excluded. */
+:root {
+  --health-red: #c62828;
+  --health-red-dark: #a91f24;
+  --health-red-soft: #fff1f1;
+  --health-ink: #24272b;
+  --health-muted: #68717b;
+  --health-border: #e5e7eb;
+  --health-surface: #ffffff;
+  --health-canvas: #f7f8fa;
+}
+
+html, body, [class*="css"] { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important; }
+.stApp, [data-testid="stAppViewContainer"] { background: var(--health-canvas) !important; color: var(--health-ink) !important; }
+[data-testid="stMain"] { background: var(--health-canvas) !important; }
+[data-testid="stMainBlockContainer"], .main .block-container { color: var(--health-ink) !important; }
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stText"], .stText,
+[data-testid="stCaptionContainer"] p { color: var(--health-muted); }
+
+h1, h2, h3, h4, h5, h6,
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3 { color: var(--health-ink) !important; font-weight: 650 !important; letter-spacing: -0.02em; }
+
+/* Header and navigation */
+header[data-testid="stHeader"] { background: rgba(247,248,250,.94) !important; }
+section[data-testid="stSidebar"] { background: #fff !important; border-right: 1px solid var(--health-border); }
+section[data-testid="stSidebar"] * { color: var(--health-ink); }
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: var(--health-muted); }
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p { color: var(--health-ink) !important; }
+section[data-testid="stSidebar"] .stButton button[kind="primary"] { background: var(--health-red-soft) !important; color: var(--health-red) !important; border: 1px solid #f3caca !important; border-left: 4px solid var(--health-red) !important; box-shadow: none !important; }
+section[data-testid="stSidebar"] .stButton button[kind="secondary"] { background: #fff !important; color: var(--health-ink) !important; border: 1px solid transparent !important; box-shadow: none !important; }
+section[data-testid="stSidebar"] .stButton button[kind="secondary"]:hover { background: #fff5f5 !important; border-color: #f3caca !important; }
+[data-testid="stSidebarCollapseButton"], button[data-testid="collapsedControl"] { color: var(--health-red) !important; }
+
+/* Primary and secondary actions */
+.stButton > button, .stFormSubmitButton > button, .stDownloadButton > button,
+button[data-testid^="stBaseButton"] { border-radius: 10px !important; font-weight: 600 !important; transition: background .18s ease, border-color .18s ease, box-shadow .18s ease !important; }
+.stButton > button[kind="primary"], .stFormSubmitButton > button,
+button[data-testid="stBaseButton-primary"] { background: var(--health-red) !important; color: #fff !important; border: 1px solid var(--health-red) !important; box-shadow: 0 2px 5px rgba(160,30,35,.12) !important; }
+.stButton > button[kind="primary"]:hover, .stFormSubmitButton > button:hover,
+button[data-testid="stBaseButton-primary"]:hover { background: var(--health-red-dark) !important; border-color: var(--health-red-dark) !important; box-shadow: 0 4px 12px rgba(160,30,35,.18) !important; }
+.stButton > button[kind="secondary"], .stDownloadButton > button,
+button[data-testid="stBaseButton-secondary"] { background: #fff !important; color: var(--health-ink) !important; border: 1px solid var(--health-border) !important; box-shadow: none !important; }
+.stButton > button[kind="secondary"]:hover, .stDownloadButton > button:hover { border-color: #e5aaaa !important; color: var(--health-red) !important; background: #fffafa !important; }
+
+/* Inputs, selectors, sliders, checkboxes */
+label, [data-testid="stWidgetLabel"] p { color: var(--health-ink) !important; font-weight: 550 !important; }
+input, textarea, [data-baseweb="input"] input { color: var(--health-ink) !important; }
+input::placeholder, textarea::placeholder { color: #9299a2 !important; }
+div[data-baseweb="input"] > div, div[data-baseweb="select"] > div,
+[data-testid="stNumberInput"] [data-baseweb="input"],
+[data-testid="stTextInput"] [data-baseweb="input"],
+[data-testid="stTextArea"] textarea { background: #fff !important; border: 1px solid #d9dde3 !important; border-radius: 9px !important; color: var(--health-ink) !important; box-shadow: none !important; }
+div[data-baseweb="select"] *, [data-baseweb="popover"] * { color: var(--health-ink) !important; }
+div[data-baseweb="input"]:focus-within, div[data-baseweb="select"]:focus-within,
+[data-testid="stTextArea"] textarea:focus { border-color: var(--health-red) !important; box-shadow: 0 0 0 2px rgba(198,40,40,.10) !important; }
+[data-testid="stCheckbox"] label, [data-testid="stRadio"] label { color: var(--health-ink) !important; }
+[data-testid="stSlider"] [role="slider"] { background: var(--health-red) !important; }
+
+/* Content panels and form cards */
+[data-testid="stVerticalBlockBorderWrapper"], [data-testid="stForm"],
+[data-testid="stExpander"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 13px !important; box-shadow: 0 2px 8px rgba(25,35,45,.035) !important; }
+[data-testid="stExpander"] summary, [data-testid="stExpander"] summary p { color: var(--health-ink) !important; }
+.st-key-tb_card, .st-key-hiv_card { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 14px !important; box-shadow: 0 2px 10px rgba(25,35,45,.04) !important; }
+.st-key-tb_card:hover, .st-key-hiv_card:hover { border-color: #e8b6b6 !important; box-shadow: 0 4px 14px rgba(25,35,45,.06) !important; }
+.st-key-responsive_control_panel [data-element-to-style="stVerticalBlock"] > div { background: #fff !important; border: 1px solid var(--health-border) !important; box-shadow: 0 2px 8px rgba(25,35,45,.04) !important; backdrop-filter: none !important; }
+
+/* Disease selection segmented control */
+div[data-baseweb="button-group"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 10px !important; }
+div[data-baseweb="button-group"] button { color: var(--health-muted) !important; }
+div[data-baseweb="button-group"] button[data-testid="stBaseButton-segmented_controlActive"] { background: var(--health-red-soft) !important; color: var(--health-red) !important; }
+div[data-baseweb="button-group"]::before { background: rgba(198,40,40,.10) !important; }
+
+/* Main application hero */
+.hero-section { background: #fff !important; color: var(--health-ink) !important; border: 1px solid var(--health-border) !important; border-left: 4px solid var(--health-red) !important; border-radius: 14px !important; box-shadow: 0 3px 12px rgba(25,35,45,.045) !important; backdrop-filter: none !important; padding: 22px 24px !important; }
+.hero-title { color: var(--health-ink) !important; font-size: 1.8rem !important; font-weight: 700 !important; }
+.hero-subtitle { color: var(--health-muted) !important; opacity: 1 !important; }
+.section-title { color: var(--health-red) !important; text-shadow: none !important; }
+
+/* Tables and dataframe surfaces */
+[data-testid="stDataFrame"], [data-testid="stTable"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 10px !important; }
+[data-testid="stMetric"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 12px !important; padding: 12px 14px !important; }
+[data-testid="stMetricLabel"] p { color: var(--health-muted) !important; }
+[data-testid="stMetricValue"] { color: var(--health-ink) !important; }
+[data-testid="stMetricDelta"] { color: var(--health-muted) !important; }
+[data-testid="stProgressBar"] > div > div { background: var(--health-red) !important; }
+
+/* Feedback, notices and footer */
+[data-testid="stAlert"] { border-radius: 10px !important; }
+[data-testid="stCaptionContainer"] p { color: var(--health-muted) !important; font-size: .86rem !important; }
+hr { border-color: var(--health-border) !important; }
+
+@media (max-width: 768px) {
+  [data-testid="stMainBlockContainer"] { padding-left: 1rem !important; padding-right: 1rem !important; }
+  .hero-section { padding: 18px !important; }
+  .hero-title { font-size: 1.45rem !important; }
+  .st-key-tb_card, .st-key-hiv_card { padding: 18px !important; }
+}

@@ -61,7 +61,7 @@ def local_css(file_name):
 
 
 # ================= APPLY CSS =================
-local_css("styles.css")
+local_css("assets/healthcare.css")
 
 
 # ---------------- LOGIN CHECK ----------------
