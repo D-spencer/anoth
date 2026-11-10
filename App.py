@@ -44,11 +44,11 @@ hide_streamlit_style = """
     /* Show status widget (includes running indicator) */
     [data-testid="stStatusWidget"] {visibility: visible !important;}
 
-    /* Hide settings menu */
-    button[kind="header"] {visibility: hidden;}
+    /* Hide only the settings menu; keep sidebar collapse/expand controls available. */
+    button[title="Settings"] {visibility: hidden;}
 
     /* Keep sidebar toggle button visible */
-    button[data-testid="collapsedControl"] {visibility: visible !important;}
+    button[data-testid="collapsedControl"], [data-testid="stSidebarCollapseButton"] {display: inline-flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;}
 
     /* Keep the sidebar toggle area visible */
     [data-testid="stSidebarNav"] {visibility: visible !important;}
@@ -733,86 +733,11 @@ def dashboard():
         {
             display: flex;
             flex-direction: column;
-            gap: 16px; /* Increased overall layout flex gap */
+            gap: 12px;
             align-items: flex-end;
-            margin: 15px 30px;
+            margin: 14px 18px;
             width: auto;
-        }
-
-        div[data-element-to-style="stVerticalBlock"] > div {
-            width: 240px;
-            background: #ffffff;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 2px 8px rgba(25,35,45,.04);
-        }
-
-        /* ===========================
-        iOS STYLE SEGMENTED CONTROL
-        =========================== */
-
-        div[data-baseweb="button-group"] {
-            position: relative;
-            background: rgba(0,0,0,0.05) !important;
-            border-radius: 12px;
-            padding: 4px;
-            border: 1px solid rgba(0,0,0,0.08);
-            display: flex;
-            overflow: hidden;
-        }
-
-        /* ALL BUTTONS */
-        div[data-baseweb="button-group"] button {
-            flex: 1;
-            background: transparent !important;
-            color: #444 !important;
-            border: none !important;
-            z-index: 2;
-            transition: color 0.25s ease;
-        }
-
-        /* HIDE STREAMLIT ACTIVE STYLE */
-        div[data-baseweb="button-group"] button[data-testid="stBaseButton-segmented_controlActive"] {
-            background: transparent !important;
-            color: #c62828 !important;
-        }
-
-        /* SLIDING INDICATOR */
-        div[data-baseweb="button-group"]::before {
-            content: "";
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            width: calc(50% - 4px);
-            height: calc(100% - 8px);
-            background: rgba(198, 40, 40, 0.12);
-            border-radius: 10px;
-            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-            z-index: 1;
-        }
-
-        /* MOVE SLIDER WHEN SECOND BUTTON IS ACTIVE */
-        div[data-baseweb="button-group"]:has(button[data-testid="stBaseButton-segmented_controlActive"]:nth-child(2))::before {
-            transform: translateX(100%);
-        }
-
-        /* HOVER */
-        div[data-baseweb="button-group"] button:hover {
-            background: rgba(198, 40, 40, 0.08) !important;
-        }
-        @media (max-width: 768px) {
-            {
-                align-items: center !important;
-                margin: 15px auto !important;
-                width: 100% !important;
-            }
-            div[data-element-to-style="stVerticalBlock"] > div {
-                width: 90% !important;
-                max-width: 320px;
-            }
+            overflow: visible;
         }
         """
     ):

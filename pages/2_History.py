@@ -29,11 +29,11 @@ hide_streamlit_style = """
     /* Show status widget (includes running indicator) */
     [data-testid="stStatusWidget"] {visibility: visible !important;}
 
-    /* Hide settings menu */
-    button[kind="header"] {visibility: hidden;}
+    /* Hide only the settings menu; keep sidebar collapse/expand controls available. */
+    button[title="Settings"] {visibility: hidden;}
 
     /* Keep sidebar toggle button visible */
-    button[data-testid="collapsedControl"] {visibility: visible !important;}
+    button[data-testid="collapsedControl"], [data-testid="stSidebarCollapseButton"] {display: inline-flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;}
 
     /* Keep the sidebar toggle area visible */
     [data-testid="stSidebarNav"] {visibility: visible !important;}
