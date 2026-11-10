@@ -32,15 +32,7 @@ hide_streamlit_style = """
     /* Hide the "Made with Streamlit" footer */
     .css-1d391kg {visibility: hidden;}
 
-    /* Hide the three-dot menu in the top right */
-    button[title="View fullscreen"] {visibility: hidden;}
-
-    /* Hide the GitHub icon and other toolbar items */
-    .css-14xtw13.e8zbici0 {visibility: hidden;}
-
-    /* Hide toolbar elements but preserve sidebar controls */
-    [data-testid="stDecoration"] {visibility: hidden;}
-
+    /* Keep Streamlit's top header and toolbar available; the healthcare theme styles them. */
     /* Show status widget (includes running indicator) */
     [data-testid="stStatusWidget"] {visibility: visible !important;}
 
