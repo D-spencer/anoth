@@ -12,6 +12,7 @@ from database import  get_user_role, save_feedback, get_user_name,supabase
 from theme import apply_theme_css
 from streamlit_extras.stylable_container import stylable_container
 import qrcode
+import base64
 from io import BytesIO
 import streamlit.components.v1 as components
 
@@ -725,11 +726,25 @@ def dashboard():
         qr.add_data(APP_URL)
         qr.make(fit=True)
         qr_image = qr.make_image(fill_color="#090d1f", back_color="white").convert("RGB")
+        qr_buffer = BytesIO()
+        qr_image.save(qr_buffer, format="PNG")
+        qr_base64 = base64.b64encode(qr_buffer.getvalue()).decode("ascii")
 
-        st.image(
-            qr_image,
-            width=180,
-            caption="Scan QR Code"
+        components.html(
+            f"""
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <img
+                    src="data:image/png;base64,{qr_base64}"
+                    alt="QR code for the official Disease Prediction System"
+                    width="180"
+                    height="180"
+                    style="display:block;width:180px;height:180px;max-width:100%;object-fit:contain;background:#ffffff;padding:8px;border-radius:8px;"
+                />
+                <span style="color:#aeb4c0;font-size:14px;">Scan QR Code</span>
+            </div>
+            """,
+            height=215,
+            scrolling=False,
         )
 
 
