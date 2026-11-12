@@ -4,9 +4,7 @@
 
 
 
-/* ==========================================
-   GLOBAL APP & TYPOGRAPHY STYLES
-   ========================================== */
+
 html, body, [class*="css"]  {
     font-family: 'Inter', sans-serif;
 }
@@ -39,13 +37,13 @@ html, body, [class*="css"]  {
     color: white;
 }
 
-/* Base adaptive widget label logic */
+
 label, [data-testid="stWidgetLabel"] p {
     color: var(--text-color) !important;
     font-weight: 600 !important;
 }
 
-/* Global placeholders */
+
 input::placeholder {
     color: rgba(0, 0, 0, 0.4) !important;
 }
@@ -54,9 +52,7 @@ input::placeholder {
 }
 
 
-/* ==========================================
-   APP HEADER & LAYOUT CONTROLS
-   ========================================== */
+
 header[data-testid="stHeader"], [data-testid="stHeader"] {
     background: transparent !important;
     background-color: rgba(0, 0, 0, 0) !important;
@@ -83,9 +79,7 @@ header[data-testid="stHeader"], [data-testid="stHeader"] {
 }
 
 
-/* ==========================================
-   HERO & TEXT COMPONENT STYLES
-   ========================================== */
+
 .hero-section {
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(12px);
@@ -129,9 +123,7 @@ h1, h2, h3 {
 }
 
 
-/* ==========================================
-   BUTTONS & GLOBAL CUSTOM CARDS
-   ========================================== */
+
 .stButton > button {
     width: 100%;
     background: linear-gradient(90deg, #007bff, #7b2cff);
@@ -177,9 +169,7 @@ h1, h2, h3 {
 }
 
 
-/* ==========================================
-   STREAMLIT NATIVE INPUT COMPONENT FIXES
-   ========================================== */
+
 .stSelectbox label {
     color: rgb(255, 255, 255) !important;
     font-weight: 600;
@@ -210,7 +200,7 @@ div[data-baseweb="select"] svg {
     fill: white !important;
 }
 
-/* Number inputs grid container layout grouping */
+
 div[data-testid="stNumberInputContainer"] div[data-baseweb="input"],
 div[data-testid="stNumberInput"] > div {
     background: rgba(10, 15, 35, 0.95) !important;
@@ -253,9 +243,7 @@ button[data-testid="stNumberInputStepDown"]:hover {
 }
 
 
-/* ==========================================
-   DROPDOWNS & LIST BOXES
-   ========================================== */
+
 ul {
     background: #0b1020 !important;
 }
@@ -282,9 +270,7 @@ li[role="option"][aria-selected="true"] {
 }
 
 
-/* ==========================================
-   SIDEBAR SYSTEM NAVIGATION UTILITIES
-   ========================================== */
+
 section[data-testid="stSidebar"] {
     background: linear-gradient(180deg, #060816 0%, #090d1f 100%);
     border-right: 1px solid rgba(255,255,255,0.05);
@@ -327,9 +313,7 @@ section[data-testid="stSidebar"] .stButton button:hover {
 }
 
 
-/* ==========================================
-   SIDEBAR TOGGLE CONTROL BUTTON PANELS
-   ========================================== */
+
 [data-testId="stExpandSidebarButton"] {
     background-color: white !important;
     border: 2px solid #4CAF50 !important;
@@ -356,7 +340,7 @@ section[data-testid="stSidebar"] .stButton button:hover {
     justify-content: center !important;
 }
 
-/* Arrow controls (Overridden globally to prioritize black state visibility safely) */
+
 [data-testId="stExpandSidebarButton"] span,
 [data-testid="stSidebarCollapseButton"] svg,
 [data-testid="stSidebarCollapse"] button svg,
@@ -367,9 +351,7 @@ section[data-testid="stSidebar"] .stButton button:hover {
 }
 
 
-/* ==========================================
-   FORMS & INPUT GROUPS CONNECTORS
-   ========================================== */
+
 [data-testid="stVerticalBlock"] > div:has(input[aria-label="Email"]) {
     margin-bottom: -15px !important;
 }
@@ -393,9 +375,7 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
 }
 
 
-/* ==========================================
-   CHARTS & INLINE DATA VIEWS
-   ========================================== */
+
 [data-testid="stPlotlyChart"] {
     background-color: rgba(255, 255, 255, 0.05) !important;
     backdrop-filter: blur(8px) !important;
@@ -443,9 +423,7 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
 }
 
 
-/* ==========================================
-   MEDIA SCREENS RESPONSIVE CONFIGURATIONS
-   ========================================== */
+
 @media (max-width: 768px) {
     .hero-section {
         padding-top: 8px !important;
@@ -473,9 +451,7 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
 
 
 
-/* ===========================
-   BACKGROUND GLOW LAYERS
-   =========================== */
+
 
 .bg-glow {
     position: fixed;
@@ -489,14 +465,14 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
     animation: floatGlow 12s ease-in-out infinite;
 }
 
-/* purple glow */
+
 .glow1 {
     background: #6c2bd9;
     top: 10%;
     left: 10%;
 }
 
-/* cyan glow */
+
 .glow2 {
     background: #00bcd4;
     bottom: 10%;
@@ -504,18 +480,8 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
     animation-delay: 6s;
 }
 
-/* animation */
-/* @keyframes floatGlow {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-    50% {
-        transform: translate(80px, -60px) scale(1.2);
-    }
-    100% {
-        transform: translate(0, 0) scale(1);
-    }
-} */
+
+
 
 @keyframes floatGlow {
     0%, 100% {
@@ -527,9 +493,7 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
 }
 
 
-/* ===========================
-   DOWNLOAD BUTTON STYLING FIX
-   =========================== */
+
 
 .stDownloadButton button {
     width: 100%;
@@ -545,14 +509,14 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
                 0 0 20px rgba(123,44,255,0.15) !important;
 }
 
-/* hover effect */
+
 .stDownloadButton button:hover {
     transform: translateY(-3px) scale(1.01);
     box-shadow: 0 0 18px rgba(0,123,255,0.4),
                 0 0 40px rgba(123,44,255,0.35) !important;
 }
 
-/* text inside download button */
+
 .stDownloadButton button p {
     color: white !important;
     margin: 0 !important;
@@ -567,7 +531,7 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
     box-shadow: 0 0 15px rgba(123,44,255,0.4);
 }
 
-/* make icon white for contrast */
+
 [data-testid="stSidebarCollapseButton"] span {
     color: white !important;
 }
@@ -577,7 +541,7 @@ div[data-testid="stVerticalBlock"]:has(> .auth-box),
 
 
 
-/* Current disease */
+
 section[data-testid="stSidebar"] .stButton button[kind="primary"] {
     background: rgba(123,44,255,0.15) !important;
     color: #7b2cff !important;
@@ -590,13 +554,13 @@ section[data-testid="stSidebar"] .stButton button[kind="primary"] {
     font-weight: 700 !important;
 }
 
-/* Other diseases */
+
 section[data-testid="stSidebar"] .stButton button[kind="secondary"] {
     border-left: 4px solid transparent !important;
 }
 
 
-/* Select a Disease title */
+
 section[data-testid="stSidebar"]
 div[data-testid="stMarkdownContainer"] h3 {
     color: #0c0c0c !important;
@@ -605,7 +569,7 @@ div[data-testid="stMarkdownContainer"] h3 {
 }
 
 
-/* Metric values */
+
 div[data-testid="stMetricValue"] p {
     color: #ffffff !important;
     font-weight: 800 !important;
@@ -613,21 +577,21 @@ div[data-testid="stMetricValue"] p {
 }
 
 
-/* Sidebar labels */
+
 section[data-testid="stSidebar"]
 label[data-testid="stWidgetLabel"] p {
     color: white !important;
     font-weight: 600 !important;
 }
 
-/* Share App title */
+
 section[data-testid="stSidebar"]
 [data-testid="stExpander"] p {
     color: #d8c4ff !important;
     font-weight: 700 !important;
 }
 
-/* Arrow */
+
 section[data-testid="stSidebar"]
 [data-testid="stIconMaterial"] {
     color: white !important;
@@ -636,14 +600,14 @@ section[data-testid="stSidebar"]
 
 
 
-/* Placeholder text */
+
 div[data-baseweb="select"] div:last-child {
     color: #ffffff !important;
     opacity: 1 !important;
     filter: none !important;
 }
 
-/* Placeholder container */
+
 div[data-baseweb="select"] div:last-child * {
     color: #ffffff !important;
     opacity: 1 !important;
@@ -657,7 +621,7 @@ div[data-baseweb="select"] div:last-child * {
     font-size: 16px !important;
 }
 
-/* Current application compatibility layer — original navy/blue/purple palette retained. */
+
 :root { --app-accent: #007bff; --app-accent-2: #7b2cff; --app-card: rgba(8, 12, 28, .88); }
 [data-testid="stAppViewContainer"], [data-testid="stMain"], [data-testid="stMainBlockContainer"] { color: #f5f7ff !important; }
 [data-testid="stSidebar"] { background: linear-gradient(180deg, #101a36 0%, #090d1f 100%) !important; border-right: 1px solid rgba(123,44,255,.22) !important; }
@@ -676,7 +640,7 @@ section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover { ba
 [data-testid="stMetricLabel"] *, [data-testid="stMetricValue"] * { color:#fff !important; }
 [data-testid="stMetricDelta"] { color:#d8c4ff !important; }
 header[data-testid="stHeader"] { background:rgba(4,8,22,.94) !important; }
-/* Keep the native Streamlit sidebar icon only; no extra pseudo-element icon. */
+
 [data-testid="stSidebarCollapseButton"], button[data-testid="collapsedControl"] { visibility:visible !important; opacity:1 !important; pointer-events:auto !important; }
 [data-testid="stSidebarCollapseButton"]::after, button[data-testid="collapsedControl"]::after { content:none !important; display:none !important; }
 
@@ -684,7 +648,7 @@ header[data-testid="stHeader"] { background:rgba(4,8,22,.94) !important; }
 .hero-meta b { color:#ffffff !important; }
 
 
-/* Final refinement: questionnaire cards use the original navy glass surfaces. */
+
 :root {
   --question-card-bg: linear-gradient(145deg, rgba(13,19,42,.97), rgba(18,23,48,.96));
   --question-card-text: #f5f7ff;
@@ -709,7 +673,7 @@ header[data-testid="stHeader"] { background:rgba(4,8,22,.94) !important; }
   color: #f5f7ff !important;
 }
 .st-key-tb_card hr, .st-key-hiv_card hr { border-color: rgba(160,150,220,.24) !important; }
-/* Avoid applying borders/backgrounds to nested text spans: this caused the odd text boxes. */
+
 section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
   background: linear-gradient(90deg,#007bff,#7b2cff) !important;
   color: #fff !important; border: 1px solid rgba(180,120,255,.55) !important;
@@ -731,8 +695,7 @@ section[data-testid="stSidebar"] .stButton > button:focus,
 section[data-testid="stSidebar"] .stButton > button:focus-visible { outline: none !important; box-shadow: 0 0 0 2px rgba(123,44,255,.35) !important; }
 
 
-/* Remove the dark translucent header veil and Streamlit top decoration bar.
-   Native sidebar and status controls remain available. */
+
 header[data-testid="stHeader"],
 header[data-testid="stHeader"] > div {
   background: transparent !important;
@@ -748,3 +711,7 @@ header[data-testid="stHeader"] > div {
   height: 0 !important;
   pointer-events: none !important;
 }
+
+
+/* App page only: keep the History and Admin hero positions unchanged. */
+.app-page-hero { margin-top: -12px !important; }

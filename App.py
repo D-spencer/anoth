@@ -15,17 +15,14 @@ import qrcode
 from io import BytesIO
 import streamlit.components.v1 as components
 
-# Validate/restore the login on each Streamlit run without a periodic auto-refresh.
 restore_persistent_session()
 
 
 
 
-# Hide default Streamlit elements (but keep sidebar toggle functionality)
 hide_streamlit_style = """
     <style>
     /* Hide the main menu (hamburger menu) but keep sidebar toggle */
-    #MainMenu {visibility: hidden;}
 
     /* Hide the footer */
     footer {visibility: hidden;}
@@ -52,7 +49,6 @@ hide_streamlit_style = """
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-# Keep the Streamlit running indicator and sidebar toggle, but hide page toolbar actions.
 st.markdown("""<style>
 [data-testid="stToolbarActions"] { display: none !important; visibility: hidden !important; }
 [data-testid="stStatusWidget"] { display: flex !important; visibility: visible !important; opacity: 1 !important; }
@@ -64,8 +60,6 @@ st.markdown("""<style>
 
 
 
-# #-----------------Hide Side bar---------------------------
-# ---------------- SESSION STATE INIT ----------------
 
 def init_session():
     defaults = {
@@ -84,47 +78,17 @@ init_session()
 
 
 
-# # ---------------- RESTORE SUPABASE SESSION ----------------
-# if not st.session_state.get("session"):
-#     try:
-#         session = supabase.auth.get_session()
-
-
-#         if session and getattr(session, "user", None):
-
-#             # Restore authenticated user
-#             st.session_state["session"] = session
-#             st.session_state["user"] = session.user
-#             st.session_state["active_user_id"] = session.user.id
-
-#             # Fetch role
-#             role = get_user_role(session.user.id)
-#             st.session_state["role"] = role or "user"
-
-#             # Fetch full name
-#             full_name = get_user_name(session.user.id)
-#             st.session_state["full_name"] = full_name or ""
-
-#         else:
-#             # No active session found
-#             st.session_state["session"] = None
-#             st.session_state["user"] = None
-#             st.session_state["role"] = "user"
-#             st.session_state["full_name"] = ""
-#             st.session_state["active_user_id"] = None
-
-#     except Exception as e:
-#         st.error(f"Session restore error: {e}")
-
-#         st.session_state["session"] = None
-#         st.session_state["user"] = None
-#         st.session_state["role"] = "user"
-#         st.session_state["full_name"] = ""
-#         st.session_state["active_user_id"] = None
 
 
 
-# ---------------- RESTORE USER ----------------
+
+
+
+
+
+
+
+
 
 if "user" not in st.session_state:
     st.session_state["user"] = None
@@ -142,14 +106,12 @@ if "active_user_id" not in st.session_state:
     st.session_state["active_user_id"] = None
 
 
-# ---------------- GET USER ----------------
 user = st.session_state.get("user")
 
 if "full_name" not in st.session_state:
     st.session_state["full_name"] = ""
 
 
-# ---------------- HIDE SIDEBAR (ONLY IF NOT LOGGED IN) ----------------
 if not user:
     hide_sidebar_style = """
         <style>
@@ -161,7 +123,6 @@ if not user:
     st.markdown(hide_sidebar_style, unsafe_allow_html=True)
 
 
-# ---------------- SIDEBAR CONTENT  ----------------
 if user and hasattr(user, "email"):
     name = st.session_state.get("full_name")
 
@@ -189,20 +150,16 @@ st.markdown("""
             """ , unsafe_allow_html=True)
 
 
-# ================= AUTH PAGE =================
 def auth_page():
 
-    # ---------------- PAGE CONFIG ----------------
     st.set_page_config(
         page_title="Disease Prediction System",
         page_icon="🩺",
         layout="centered"
     )
 
-    # Keep the existing authentication-page styling isolated from the new app theme.
     local_css("styles.css")
 
-    # ---------------- CSS ----------------
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
@@ -246,7 +203,6 @@ def auth_page():
     </style>
     """, unsafe_allow_html=True)
 
-    # ---------------- SESSION STATE ----------------
     if "auth_mode" not in st.session_state:
         st.session_state.auth_mode = "signin"
 
@@ -266,8 +222,6 @@ def auth_page():
 
     
         
-    # ---------------- MAIN CONTAINER (CENTERED) ----------------
-    # Use columns to NARROW the container on the screen
     col1, col2, col3 = st.columns([0.1, 0.8, 0.1]) 
 
     with col2:
@@ -417,9 +371,6 @@ def auth_page():
 
                     st.markdown('<div class="title">Reset Password via OTP</div>', unsafe_allow_html=True)
 
-                    # =================================================
-                    # STEP 1: REQUEST OTP
-                    # =================================================
                     if st.session_state.reset_step == "request":
 
                         email = st.text_input(
@@ -449,7 +400,6 @@ def auth_page():
                                         st.session_state.reset_email_value = email.strip()
                                         st.session_state.reset_step = "verify"
 
-                                        # START TIMER
                                         st.session_state.otp_timer_start = time.time()
 
                                         st.rerun()
@@ -462,9 +412,6 @@ def auth_page():
                             st.rerun()
 
 
-                    # =================================================
-                    # STEP 2: VERIFY OTP + RESET PASSWORD
-                    # =================================================
                     elif st.session_state.reset_step == "verify":
 
                         st.markdown(
@@ -490,9 +437,6 @@ def auth_page():
                             placeholder="Confirm new password"
                         )
 
-                        # =================================================
-                        # VERIFY BUTTON
-                        # =================================================
                         if st.button("Verify & Update Password", use_container_width=True):
 
                             if not otp_code or not new_password or not confirm_password:
@@ -516,7 +460,6 @@ def auth_page():
                                         )
                                         st.balloons()
 
-                                        # RESET EVERYTHING
                                         st.session_state.auth_mode = "signin"
                                         st.session_state.reset_step = "request"
                                         st.session_state.reset_email_value = ""
@@ -527,9 +470,6 @@ def auth_page():
                                     else:
                                         st.error("try the verify button again or Invalid/expired OTP code.")
 
-                        # =================================================
-                        # RESEND SECTION
-                        # =================================================
                         st.markdown("---")
                         st.subheader("Need a new code?")
 
@@ -548,7 +488,6 @@ def auth_page():
                                     if success:
                                         st.success("New OTP sent! Check your email.")
 
-                                        # Restart cooldown timer
                                         st.session_state.otp_timer_start = time.time()
 
                                         st.rerun()
@@ -556,9 +495,6 @@ def auth_page():
                                     else:
                                         st.error("Failed to resend OTP.")
 
-                        # =================================================
-                        # CHANGE EMAIL
-                        # =================================================
                         if st.button("Use Another Email", use_container_width=True):
 
                             st.session_state.reset_step = "request"
@@ -566,9 +502,6 @@ def auth_page():
 
                             st.rerun()
 
-                        # =================================================
-                        # BACK TO SIGN IN
-                        # =================================================
                         if st.button("← Back to Sign In", use_container_width=True):
 
                             st.session_state.auth_mode = "signin"
@@ -578,9 +511,6 @@ def auth_page():
 
                             st.rerun()
 
-                # =================================================
-                #                   SIGN IN
-                # =================================================
                 elif st.session_state.auth_mode == "signin":
                     st.markdown('<div class="title">Welcome Back</div>', unsafe_allow_html=True)
                     st.markdown('<div class="subtitle">Sign in to continue</div>', unsafe_allow_html=True)
@@ -619,9 +549,6 @@ def auth_page():
                         st.session_state.auth_mode = "signup"
                         st.rerun()
 
-                # =================================================
-                #                   SIGN UP
-                # =================================================
                 else:
                     st.markdown('<div class="title">Create Account</div>', unsafe_allow_html=True)
                     st.markdown('<div class="subtitle">Join the system</div>', unsafe_allow_html=True)
@@ -634,7 +561,6 @@ def auth_page():
                         terms = st.checkbox("I agree to the Terms & Conditions")
                         signup_btn = st.form_submit_button("Create Account", use_container_width=True)
 
-                    #  Create an empty container 
                     
                     error_container = st.empty()
 
@@ -675,15 +601,10 @@ def auth_page():
 
 def dashboard():
 
-    # Load exactly one stylesheet based on the active Streamlit theme.
-    # Authentication screens continue using their original styles.css.
     apply_theme_css()
 
     disease_options = ["Tuberculosis", "HIV/AIDS"]
 
-    # =========================
-    # INIT STATE
-    # =========================
     if "page" not in st.session_state:
         st.session_state.page = "Tuberculosis"
 
@@ -691,9 +612,6 @@ def dashboard():
         st.session_state.use_quick_select = False
 
 
-    # =========================
-    # URL ROUTING 
-    # =========================
     query_params = st.query_params
 
     if "disease" in query_params or "page" in query_params:
@@ -707,11 +625,8 @@ def dashboard():
         st.query_params["disease"] = page
 
 
-    # =========================
-    # HERO SECTION
-    # =========================
     st.markdown(f"""
-    <div class="hero-section">
+    <div class="hero-section app-page-hero">
         <div class="hero-title">Disease Prediction System</div>
         <div class="hero-subtitle">
             ML-powered Tuberculosis & HIV/AIDS Prediction Platform
@@ -724,9 +639,6 @@ def dashboard():
     """, unsafe_allow_html=True)
 
 
-    # =========================================================
-    # 🎛 COMPACT & RESPONSIVE CONTROLS PANEL
-    # =========================================================
     with stylable_container(
         key="responsive_control_panel",
         css_styles="""
@@ -741,14 +653,12 @@ def dashboard():
         }
         """
     ):
-        # 1. The Toggle Switch
         st.session_state.use_quick_select = st.checkbox(
             "Use quick selection",
             value=st.session_state.use_quick_select,
             key="quick_select_toggle"
         )
 
-        # 2. Render Quick Switch layout if checked
         if st.session_state.use_quick_select:
             selected = st.segmented_control(
                 "Quick Switch",
@@ -758,10 +668,6 @@ def dashboard():
                 key="quick_switch_widget"
             )
             
-            # if selected is not None and selected != st.session_state.page:
-            #     st.session_state.page = selected
-            #     st.query_params["page"] = selected
-            #     st.rerun()
 
 
             if selected is not None and selected != st.session_state.page:
@@ -771,14 +677,10 @@ def dashboard():
 
    
 
-    # =========================================================
-    # 🎛 NAVIGATION STYLE 1: SIDEBAR (FALLBACK FULL CONTROL)
-    # =========================================================
   
     if not st.session_state.use_quick_select:
         st.sidebar.subheader("Select a Disease")
         for disease in disease_options:
-            # Instead of a complex callback sequence, we check the button state directly inline
             if st.sidebar.button(
                 disease,
                 use_container_width=True,
@@ -792,9 +694,6 @@ def dashboard():
     
 
 
-    # =========================
-    # CONTENT ROUTING
-    # =========================
     if st.session_state.page == "Tuberculosis":
         show_tb_page()
 
@@ -803,9 +702,6 @@ def dashboard():
 
 
 
-    # =====================================
-    # SHARE APP SECTION
-    # =====================================
 
     APP_URL = "testing2222222.streamlit.app"   
 
@@ -813,9 +709,6 @@ def dashboard():
 
     with st.sidebar.expander(" Share This App", icon=":material/share:", expanded=False):
 
-        # -------------------------
-        # App Link
-        # -------------------------
         st.text_input(
             "App Link",
             value=APP_URL,
@@ -823,9 +716,6 @@ def dashboard():
             key="share_link"
         )
 
-        # -------------------------
-        # QR Code
-        # -------------------------
         qr = qrcode.make(APP_URL)
 
         buf = BytesIO()
@@ -837,24 +727,6 @@ def dashboard():
             caption="Scan QR Code"
         )
 
-        # -------------------------
-        # Native Mobile Share
-        # -------------------------
-        # components.html(
-        #     f"""
-        #     <button id="shareBtn"
-        #         style="
-        #             width:100%;
-        #             padding:10px;
-        #             border:none;
-        #             border-radius:10px;
-        #             background:#c62828;
-        #             color:white;
-        #             cursor:pointer;
-        #             font-weight:600;
-        #         ">
-        #         📱 Share on Device
-        #     </button>
 
         components.html(
         f"""
@@ -901,7 +773,6 @@ def dashboard():
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # --- Feedback section stays underneath ---
     st.badge("Feedback or Comment", color="primary", icon="💬")
 
     feedback = st.text_area(
@@ -939,7 +810,6 @@ LEARNING APPROACE <br>
         logout()
         st.rerun()
 
-    # st.sidebar.button("Logout", icon=":material/exit_to_app:")
     
     
 
@@ -949,7 +819,6 @@ LEARNING APPROACE <br>
 
 
 
-# ================= LOAD CSS =================
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(
@@ -963,7 +832,6 @@ def local_css(file_name):
 
 
 
-## ----------Router -------
 if st.session_state["user"] is None:
     auth_page()
 else:

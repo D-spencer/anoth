@@ -1,5 +1,4 @@
-/* Professional white-and-red healthcare theme.
-   Loaded only on authenticated application pages; authentication screens are excluded. */
+
 :root {
   --health-red: #c62828;
   --health-red-dark: #a91f24;
@@ -12,7 +11,7 @@
 }
 
 html, body, [class*="css"] { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important; }
-/* Keep Streamlit's application header and toolbar visible on authenticated pages. */
+
 header[data-testid="stHeader"] { display: flex !important; visibility: visible !important; opacity: 1 !important; background: #fff !important; border-bottom: 1px solid #ead0d0 !important; z-index: 1000 !important; }
 [data-testid="stToolbar"], [data-testid="stDecoration"] { visibility: visible !important; opacity: 1 !important; }
 [data-testid="stToolbar"] { display: flex !important; }
@@ -29,7 +28,7 @@ h1, h2, h3, h4, h5, h6,
 [data-testid="stMarkdownContainer"] h2,
 [data-testid="stMarkdownContainer"] h3 { color: var(--health-ink) !important; font-weight: 650 !important; letter-spacing: -0.02em; }
 
-/* Header and navigation */
+
 header[data-testid="stHeader"] { background: rgba(242,244,246,.97) !important; z-index: 1000 !important; }
 [data-testid="stSidebar"] {
   background: linear-gradient(155deg, #ad2631 0%, #921d29 48%, #701722 100%) !important;
@@ -72,7 +71,7 @@ section[data-testid="stSidebar"] [data-testid="stExpander"] summary p { color: #
 section[data-testid="stSidebar"] input,
 section[data-testid="stSidebar"] textarea,
 section[data-testid="stSidebar"] [data-baseweb="input"] input { color: #24272b !important; background: #fff !important; }
-/* Keep only Streamlit's native sidebar toggle icon. */
+
 [data-testid="stSidebarCollapseButton"], button[data-testid="collapsedControl"] {
   visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
 }
@@ -80,7 +79,7 @@ section[data-testid="stSidebar"] [data-baseweb="input"] input { color: #24272b !
   content: none !important; display: none !important;
 }
 
-/* Primary and secondary actions */
+
 .stButton > button, .stFormSubmitButton > button, .stDownloadButton > button,
 button[data-testid^="stBaseButton"] { border-radius: 10px !important; font-weight: 600 !important; transition: background .18s ease, border-color .18s ease, box-shadow .18s ease !important; }
 .stButton > button[kind="primary"], .stFormSubmitButton > button,
@@ -91,7 +90,7 @@ button[data-testid="stBaseButton-primary"]:hover { background: var(--health-red-
 button[data-testid="stBaseButton-secondary"] { background: #fff !important; color: var(--health-ink) !important; border: 1px solid var(--health-border) !important; box-shadow: none !important; }
 .stButton > button[kind="secondary"]:hover, .stDownloadButton > button:hover { border-color: #e5aaaa !important; color: var(--health-red) !important; background: #fffafa !important; }
 
-/* Inputs, selectors, sliders, checkboxes */
+
 label, [data-testid="stWidgetLabel"] p { color: var(--health-ink) !important; font-weight: 550 !important; }
 input, textarea, [data-baseweb="input"] input { color: var(--health-ink) !important; }
 input::placeholder, textarea::placeholder { color: #9299a2 !important; }
@@ -105,7 +104,7 @@ div[data-baseweb="input"]:focus-within, div[data-baseweb="select"]:focus-within,
 [data-testid="stCheckbox"] label, [data-testid="stRadio"] label { color: var(--health-ink) !important; }
 [data-testid="stSlider"] [role="slider"] { background: var(--health-red) !important; }
 
-/* Content panels and form cards */
+
 [data-testid="stVerticalBlockBorderWrapper"], [data-testid="stForm"],
 [data-testid="stExpander"] { background: #fff !important; border: 1px solid #edcaca !important; border-left: 4px solid var(--health-red) !important; border-radius: 14px !important; box-shadow: 0 3px 12px rgba(110,25,30,.065) !important; }
 [data-testid="stPlotlyChart"], [data-testid="stVegaLiteChart"], [data-testid="stArrowVegaLiteChart"] {
@@ -117,19 +116,19 @@ div[data-baseweb="input"]:focus-within, div[data-baseweb="select"]:focus-within,
 .st-key-tb_card:hover, .st-key-hiv_card:hover { border-color: #d98c8c !important; box-shadow: 0 6px 18px rgba(110,25,30,.09) !important; }
 .st-key-responsive_control_panel [data-element-to-style="stVerticalBlock"] > div { background: #fff !important; border: 1px solid var(--health-border) !important; box-shadow: 0 2px 8px rgba(25,35,45,.04) !important; backdrop-filter: none !important; }
 
-/* Disease selection segmented control */
+
 div[data-baseweb="button-group"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 10px !important; }
 div[data-baseweb="button-group"] button { color: var(--health-muted) !important; }
 div[data-baseweb="button-group"] button[data-testid="stBaseButton-segmented_controlActive"] { background: var(--health-red-soft) !important; color: var(--health-red) !important; }
 div[data-baseweb="button-group"]::before { background: rgba(198,40,40,.10) !important; }
 
-/* Main application hero */
+
 .hero-section { background: #fff !important; color: var(--health-ink) !important; border: 1px solid var(--health-border) !important; border-left: 4px solid var(--health-red) !important; border-radius: 14px !important; box-shadow: 0 3px 12px rgba(25,35,45,.045) !important; backdrop-filter: none !important; padding: 22px 24px !important; }
 .hero-title { color: var(--health-ink) !important; font-size: 1.8rem !important; font-weight: 700 !important; }
 .hero-subtitle { color: var(--health-muted) !important; opacity: 1 !important; }
 .section-title { color: var(--health-red) !important; text-shadow: none !important; }
 
-/* Tables and dataframe surfaces */
+
 [data-testid="stDataFrame"], [data-testid="stTable"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 10px !important; }
 [data-testid="stMetric"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 12px !important; padding: 12px 14px !important; }
 [data-testid="stMetricLabel"] p { color: var(--health-muted) !important; }
@@ -137,7 +136,7 @@ div[data-baseweb="button-group"]::before { background: rgba(198,40,40,.10) !impo
 [data-testid="stMetricDelta"] { color: var(--health-muted) !important; }
 [data-testid="stProgressBar"] > div > div { background: var(--health-red) !important; }
 
-/* Feedback, notices and footer */
+
 [data-testid="stAlert"] { border-radius: 10px !important; }
 [data-testid="stCaptionContainer"] p { color: var(--health-muted) !important; font-size: .86rem !important; }
 hr { border-color: var(--health-border) !important; }
@@ -150,8 +149,8 @@ hr { border-color: var(--health-border) !important; }
 }
 
 
-/* Dropdown menus: keep the menu above cards/columns and usable on touch devices. */
-/* Let BaseWeb/Popper calculate the dropdown's position and dimensions. */
+
+
 [data-baseweb="popover"], [data-baseweb="menu"], [role="listbox"] {
   z-index: 100000 !important; pointer-events: auto !important;
 }
@@ -169,15 +168,15 @@ hr { border-color: var(--health-border) !important; }
 [data-baseweb="select"] { cursor: pointer !important; touch-action: manipulation !important; }
 [data-baseweb="select"] > div { min-height: 44px !important; }
 [data-testid="stSelectbox"] [data-baseweb="select"] svg { fill: #a91f2b !important; }
-/* Do not let questionnaire wrappers clip the native Streamlit dropdown portal. */
+
 .st-key-tb_card, .st-key-hiv_card,
 [data-testid="stVerticalBlockBorderWrapper"], [data-testid="stHorizontalBlock"],
 [data-testid="column"], [data-testid="stMainBlockContainer"] { overflow: visible !important; }
-/* All action buttons retain strong contrast and comfortable tap targets. */
+
 .stButton > button, .stFormSubmitButton > button, .stDownloadButton > button,
 button[data-testid^="stBaseButton"] { min-height: 42px !important; opacity: 1 !important; visibility: visible !important; }
 .stButton > button:disabled, button[data-testid^="stBaseButton"]:disabled { opacity: .62 !important; }
-/* Responsive questionnaire: stack columns on narrow phone screens. */
+
 @media (max-width: 700px) {
   [data-testid="stMainBlockContainer"] { padding-left: .8rem !important; padding-right: .8rem !important; }
   [data-testid="stHorizontalBlock"] { flex-wrap: wrap !important; gap: .75rem !important; }
@@ -188,7 +187,7 @@ button[data-testid^="stBaseButton"] { min-height: 42px !important; opacity: 1 !i
 }
 
 
-/* Explicit disease navigation states: active is white/red, inactive is translucent/white. */
+
 section[data-testid="stSidebar"] .stButton > button[kind="primary"] { background:#fff !important; color:#9f1d28 !important; border:1px solid #fff !important; border-left:4px solid #f4b4b4 !important; }
 section[data-testid="stSidebar"] .stButton > button[kind="primary"] *, section[data-testid="stSidebar"] .stButton > button[kind="primary"] p { color:#9f1d28 !important; }
 section[data-testid="stSidebar"] .stButton > button[kind="secondary"] { background:rgba(255,255,255,.09) !important; color:#fff !important; border:1px solid rgba(255,255,255,.28) !important; }
@@ -198,7 +197,7 @@ section[data-testid="stSidebar"] .stButton > button[kind="secondary"] *, section
 .hero-meta b { color:#24272b !important; }
 
 
-/* Final refinement: theme-aware questionnaire card tokens and page spacing. */
+
 :root {
   --question-card-bg: #ffffff;
   --question-card-text: #24272b;
@@ -207,16 +206,16 @@ section[data-testid="stSidebar"] .stButton > button[kind="secondary"] *, section
   --question-card-hover-border: #d98c8c;
   --question-card-hover-shadow: 0 6px 18px rgba(110,25,30,.09);
 }
-/* Remove Streamlit's thin top decoration line; keep the toolbar itself. */
+
 [data-testid="stDecoration"] { display: none !important; height: 0 !important; }
 header[data-testid="stHeader"] { border-bottom: 0 !important; box-shadow: none !important; }
-/* Bring the light-mode hero closer to the top and center its contents. */
+
 [data-testid="stMainBlockContainer"], .main .block-container {
   padding-top: .55rem !important;
 }
 .hero-section { text-align: center !important; margin-top: 0 !important; }
 .hero-title, .hero-subtitle, .hero-meta { text-align: center !important; }
-/* Circular red sidebar control, matching the original dark-mode control treatment. */
+
 [data-testid="stSidebarCollapseButton"],
 button[data-testid="collapsedControl"] {
   width: 48px !important; height: 48px !important; min-width: 48px !important;
@@ -234,8 +233,7 @@ button[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
 button[data-testid="collapsedControl"]:hover { background: #a91f2b !important; transform: translateY(-1px); }
 
 
-/* Final top chrome refinement: remove the tinted header veil without hiding
-   Streamlit's native status/running indicator or sidebar control. */
+
 header[data-testid="stHeader"],
 header[data-testid="stHeader"] > div {
   background: transparent !important;
@@ -252,8 +250,7 @@ header[data-testid="stHeader"] > div {
   pointer-events: none !important;
 }
 
-/* When the sidebar is collapsed, use the dark navy identity from dark mode
-   for the circular expand control in the light theme. */
+
 button[data-testid="collapsedControl"] {
   width: 48px !important;
   height: 48px !important;
@@ -280,4 +277,38 @@ button[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
 button[data-testid="collapsedControl"]:hover {
   background: linear-gradient(135deg, #1a2a50 0%, #101a36 100%) !important;
   transform: translateY(-1px);
+}
+
+
+/* App page only: lift its hero without changing History or Admin. */
+.app-page-hero { margin-top: -12px !important; }
+
+/* Keep a navy circular control visible when the light-theme sidebar is collapsed. */
+button[data-testid="collapsedControl"],
+button[data-testid="stSidebarCollapsedControl"],
+button[aria-label*="open sidebar" i],
+button[title*="open sidebar" i] {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #101a36 0%, #090d1f 100%) !important;
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 3px 14px rgba(9,13,31,.28) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+button[data-testid="collapsedControl"] svg,
+button[data-testid="stSidebarCollapsedControl"] svg,
+button[aria-label*="open sidebar" i] svg,
+button[title*="open sidebar" i] svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
 }
