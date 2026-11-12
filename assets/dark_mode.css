@@ -682,3 +682,50 @@ header[data-testid="stHeader"] { background:rgba(4,8,22,.94) !important; }
 
 .hero-meta { color:#c9d4f5 !important; margin-top:1rem !important; font-size:.96rem !important; }
 .hero-meta b { color:#ffffff !important; }
+
+
+/* Final refinement: questionnaire cards use the original navy glass surfaces. */
+:root {
+  --question-card-bg: linear-gradient(145deg, rgba(13,19,42,.97), rgba(18,23,48,.96));
+  --question-card-text: #f5f7ff;
+  --question-card-border: rgba(123,92,220,.34);
+  --question-card-accent: #7b2cff;
+  --question-card-hover-border: rgba(0,123,255,.62);
+  --question-card-hover-shadow: 0 8px 26px rgba(0,0,0,.30), 0 0 18px rgba(123,44,255,.12);
+}
+.st-key-tb_card, .st-key-hiv_card {
+  background: var(--question-card-bg) !important;
+  color: var(--question-card-text) !important;
+  border: 1px solid var(--question-card-border) !important;
+  border-left: 4px solid var(--question-card-accent) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.22) !important;
+}
+.st-key-tb_card h1, .st-key-tb_card h2, .st-key-tb_card h3,
+.st-key-hiv_card h1, .st-key-hiv_card h2, .st-key-hiv_card h3,
+.st-key-tb_card label, .st-key-hiv_card label,
+.st-key-tb_card [data-testid="stWidgetLabel"] p,
+.st-key-hiv_card [data-testid="stWidgetLabel"] p {
+  color: #f5f7ff !important;
+}
+.st-key-tb_card hr, .st-key-hiv_card hr { border-color: rgba(160,150,220,.24) !important; }
+/* Avoid applying borders/backgrounds to nested text spans: this caused the odd text boxes. */
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+  background: linear-gradient(90deg,#007bff,#7b2cff) !important;
+  color: #fff !important; border: 1px solid rgba(180,120,255,.55) !important;
+  box-shadow: 0 5px 18px rgba(80,50,210,.24) !important;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] * {
+  background: transparent !important; color: #fff !important; border: 0 !important;
+  box-shadow: none !important; outline: none !important;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+  background: rgba(255,255,255,.07) !important; color: #f5f7ff !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"] * {
+  background: transparent !important; color: #f5f7ff !important; border: 0 !important;
+  box-shadow: none !important; outline: none !important;
+}
+section[data-testid="stSidebar"] .stButton > button:focus,
+section[data-testid="stSidebar"] .stButton > button:focus-visible { outline: none !important; box-shadow: 0 0 0 2px rgba(123,44,255,.35) !important; }

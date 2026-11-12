@@ -33,13 +33,15 @@
 #     key="tb_card",
 #     css_styles="""
 #     {
-#         background: #ffffff;
+#         background: var(--question-card-bg);
+#             color: var(--question-card-text);
 
 #         border-radius: 24px;
 
 #         padding: 32px;
 
-#         border: 1px solid #e5e7eb;
+#         border: 1px solid var(--question-card-border);
+#             border-left: 4px solid var(--question-card-accent);
 
 #         transition:
 #             box-shadow 0.3s ease,
@@ -48,7 +50,7 @@
 
 #     &:hover {
 
-#         border-color: #e8b6b6;
+#         border-color: var(--question-card-hover-border);
 
 #         box-shadow:
 #             0 0 18px rgba(0,140,255,0.18),
@@ -209,16 +211,18 @@
 #         key="tb_card",
 #         css_styles="""
 #         {
-#             background: #ffffff;
+#             background: var(--question-card-bg);
+#             color: var(--question-card-text);
 #             border-radius: 24px;
 #             padding: 32px;
-#             border: 1px solid #e5e7eb;
+#             border: 1px solid var(--question-card-border);
+#             border-left: 4px solid var(--question-card-accent);
 #             transition:
 #                 box-shadow 0.3s ease,
 #                 border-color 0.3s ease;
 #         }
 #         &:hover {
-#             border-color: #e8b6b6;
+#             border-color: var(--question-card-hover-border);
 #             box-shadow:
 #                 0 0 18px rgba(0,140,255,0.18),
 #                 0 0 40px rgba(162,0,255,0.22);
@@ -369,18 +373,19 @@ def show_tb_page():
         key="tb_card",
         css_styles="""
         {
-            background: #ffffff;
+            background: var(--question-card-bg);
+            color: var(--question-card-text);
             border-radius: 24px;
             padding: 32px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--question-card-border);
+            border-left: 4px solid var(--question-card-accent);
             transition:
                 box-shadow 0.3s ease,
                 border-color 0.3s ease;
         }
         &:hover {
-            border-color: #e8b6b6;
-            box-shadow:
-                0 4px 14px rgba(25,35,45,0.06);
+            border-color: var(--question-card-hover-border);
+            box-shadow: var(--question-card-hover-shadow);
         }
         """
     ):

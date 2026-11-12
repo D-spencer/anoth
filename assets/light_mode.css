@@ -196,3 +196,39 @@ section[data-testid="stSidebar"] .stButton > button[kind="secondary"] *, section
 
 .hero-meta { color:#59636d !important; margin-top:1rem !important; font-size:.96rem !important; }
 .hero-meta b { color:#24272b !important; }
+
+
+/* Final refinement: theme-aware questionnaire card tokens and page spacing. */
+:root {
+  --question-card-bg: #ffffff;
+  --question-card-text: #24272b;
+  --question-card-border: #edcaca;
+  --question-card-accent: #c62828;
+  --question-card-hover-border: #d98c8c;
+  --question-card-hover-shadow: 0 6px 18px rgba(110,25,30,.09);
+}
+/* Remove Streamlit's thin top decoration line; keep the toolbar itself. */
+[data-testid="stDecoration"] { display: none !important; height: 0 !important; }
+header[data-testid="stHeader"] { border-bottom: 0 !important; box-shadow: none !important; }
+/* Bring the light-mode hero closer to the top and center its contents. */
+[data-testid="stMainBlockContainer"], .main .block-container {
+  padding-top: .55rem !important;
+}
+.hero-section { text-align: center !important; margin-top: 0 !important; }
+.hero-title, .hero-subtitle, .hero-meta { text-align: center !important; }
+/* Circular red sidebar control, matching the original dark-mode control treatment. */
+[data-testid="stSidebarCollapseButton"],
+button[data-testid="collapsedControl"] {
+  width: 48px !important; height: 48px !important; min-width: 48px !important;
+  border-radius: 50% !important; background: linear-gradient(135deg,#c62828,#8f1724) !important;
+  border: 3px solid #fff !important; box-shadow: 0 3px 14px rgba(120,20,30,.28) !important;
+  display: inline-flex !important; align-items: center !important; justify-content: center !important;
+}
+[data-testid="stSidebarCollapseButton"] svg,
+button[data-testid="collapsedControl"] svg,
+[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+button[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
+  color: #fff !important; fill: #fff !important; stroke: #fff !important;
+}
+[data-testid="stSidebarCollapseButton"]:hover,
+button[data-testid="collapsedControl"]:hover { background: #a91f2b !important; transform: translateY(-1px); }
