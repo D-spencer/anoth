@@ -40,6 +40,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 # Keep the Streamlit running indicator and sidebar toggle, but hide page toolbar actions.
 st.markdown("""<style>
 [data-testid="stToolbarActions"] { display: none !important; visibility: hidden !important; }
+[data-testid="stMainMenu"], button[aria-label="Main menu"], button[title="Main menu"] { display: none !important; visibility: hidden !important; }
 [data-testid="stStatusWidget"] { display: flex !important; visibility: visible !important; opacity: 1 !important; }
 [data-testid="stSidebarCollapseButton"], button[data-testid="collapsedControl"] { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
 </style>""", unsafe_allow_html=True)

@@ -312,3 +312,44 @@ button[title*="open sidebar" i] svg {
   fill: #ffffff !important;
   stroke: #ffffff !important;
 }
+
+
+/* Collapsed sidebar control: mirror the working dark-theme selector. */
+[data-testid="stExpandSidebarButton"],
+[data-testid="stExpandSidebarButton"] button,
+button[data-testid="collapsedControl"],
+button[data-testid="stSidebarCollapsedControl"] {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #101a36 0%, #090d1f 100%) !important;
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 3px 14px rgba(9,13,31,.28) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+[data-testid="stExpandSidebarButton"] svg,
+[data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"],
+button[data-testid="collapsedControl"] svg,
+button[data-testid="collapsedControl"] [data-testid="stIconMaterial"],
+button[data-testid="stSidebarCollapsedControl"] svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+[data-testid="stExpandSidebarButton"]:hover,
+[data-testid="stExpandSidebarButton"] button:hover,
+button[data-testid="collapsedControl"]:hover,
+button[data-testid="stSidebarCollapsedControl"]:hover {
+  background: linear-gradient(135deg, #1a2a50 0%, #101a36 100%) !important;
+  transform: translateY(-1px);
+}
