@@ -232,3 +232,52 @@ button[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
 }
 [data-testid="stSidebarCollapseButton"]:hover,
 button[data-testid="collapsedControl"]:hover { background: #a91f2b !important; transform: translateY(-1px); }
+
+
+/* Final top chrome refinement: remove the tinted header veil without hiding
+   Streamlit's native status/running indicator or sidebar control. */
+header[data-testid="stHeader"],
+header[data-testid="stHeader"] > div {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+[data-testid="stDecoration"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* When the sidebar is collapsed, use the dark navy identity from dark mode
+   for the circular expand control in the light theme. */
+button[data-testid="collapsedControl"] {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #101a36 0%, #090d1f 100%) !important;
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 3px 14px rgba(9,13,31,.28) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+button[data-testid="collapsedControl"] svg,
+button[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+button[data-testid="collapsedControl"]:hover {
+  background: linear-gradient(135deg, #1a2a50 0%, #101a36 100%) !important;
+  transform: translateY(-1px);
+}

@@ -729,3 +729,22 @@ section[data-testid="stSidebar"] .stButton > button[kind="secondary"] * {
 }
 section[data-testid="stSidebar"] .stButton > button:focus,
 section[data-testid="stSidebar"] .stButton > button:focus-visible { outline: none !important; box-shadow: 0 0 0 2px rgba(123,44,255,.35) !important; }
+
+
+/* Remove the dark translucent header veil and Streamlit top decoration bar.
+   Native sidebar and status controls remain available. */
+header[data-testid="stHeader"],
+header[data-testid="stHeader"] > div {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+[data-testid="stDecoration"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
