@@ -3,15 +3,18 @@ import pandas as pd
 from database import get_all_predictions, get_all_feedback
 import plotly.express as px
 from persistent_session import restore_persistent_session
+from theme import apply_theme_css, get_active_theme
 
 restore_persistent_session()
 
 from pathlib import Path
 
-CHART_TEXT = "#30343a"
-CHART_GRID = "rgba(65,75,85,.14)"
-CHART_GREEN = "#c62828"  # Retained variable name to avoid touching chart logic.
-CHART_GREEN_LIGHT = "#9aa3ad"
+ACTIVE_THEME = get_active_theme()
+DARK_MODE = ACTIVE_THEME == "dark"
+CHART_TEXT = "#e8edff" if DARK_MODE else "#30343a"
+CHART_GRID = "rgba(190,205,255,.20)" if DARK_MODE else "rgba(65,75,85,.14)"
+CHART_GREEN = "#007bff" if DARK_MODE else "#c62828"  # Series variable retained for compatibility.
+CHART_GREEN_LIGHT = "#9b59ff" if DARK_MODE else "#9aa3ad"
 CHART_CONFIG = {
     "displayModeBar": True,
     "displaylogo": False,
@@ -21,15 +24,15 @@ CHART_CONFIG = {
 
 def style_dashboard_chart(fig, height=None):
     layout = {
-        "template": "plotly_white",
+        "template": "plotly_dark" if DARK_MODE else "plotly_white",
         "paper_bgcolor": "rgba(0,0,0,0)",
         "plot_bgcolor": "rgba(0,0,0,0)",
         "font": {"family": "Arial, sans-serif", "size": 12, "color": CHART_TEXT},
         "legend": {"font": {"color": CHART_TEXT, "size": 12}},
         "hoverlabel": {
-            "bgcolor": "#ffffff",
-            "bordercolor": "#e1e4e8",
-            "font": {"color": "#30343a"},
+            "bgcolor": "#111827" if DARK_MODE else "#ffffff",
+            "bordercolor": "#59627a" if DARK_MODE else "#e1e4e8",
+            "font": {"color": "#f5f7ff" if DARK_MODE else "#30343a"},
         },
         "margin": {"l": 12, "r": 12, "t": 12, "b": 12},
     }
@@ -71,16 +74,15 @@ feedback_data = get_all_feedback()
 feedback_df = pd.DataFrame(feedback_data) if feedback_data else pd.DataFrame()
 
 
-# Admin is part of the authenticated application and uses the same white/red theme.
-_theme_css_path = Path(__file__).resolve().parent.parent / "assets" / "healthcare.css"
-_theme_css = _theme_css_path.read_text(encoding="utf-8")
-st.markdown(f"<style>\n{_theme_css}\n</style>", unsafe_allow_html=True)
-
-
-st.markdown('<div class="dash-eyebrow">Disease Prediction System · Administration</div>', unsafe_allow_html=True)
-st.title("Admin Dashboard")
-st.markdown("<div class='dash-subtitle'>Overview of predictions, disease activity and system usage</div>", unsafe_allow_html=True)
-st.caption(f"Signed in as {user_email}")
+# Admin retains Streamlit's native toolbar actions; only the theme changes by mode.
+apply_theme_css()
+st.markdown(f'''
+<div class="hero-section">
+  <div class="hero-title">Admin Dashboard</div>
+  <div class="hero-subtitle">Overview of predictions, disease activity and system usage</div>
+  <div class="hero-meta">Administration · Signed in as: <b>{user_email}</b></div>
+</div>
+''' , unsafe_allow_html=True)
 
 
 total_predictions = len(df)

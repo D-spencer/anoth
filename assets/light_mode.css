@@ -1,171 +1,198 @@
-<style>
-        html, body, .stApp, [data-testid="stAppViewContainer"],
-        [data-testid="stMain"], [data-testid="stMainBlockContainer"] {
-            background: #f5f2ed !important;
-            color: #18251f !important;
-        }
-        [data-testid="stHeader"] {
-            background: rgba(245,242,237,.96) !important;
-        }
-        [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #063d32 0%, #03251f 100%) !important;
-            border-right: 1px solid rgba(10,55,40,.16) !important;
-        }
-        [data-testid="stSidebar"] * { color: #f5fbf7 !important; }
-        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-            color: #d7e8df !important;
-        }
-        .block-container {
-            max-width: 1500px;
-            padding-top: 2rem;
-            padding-bottom: 3rem;
-        }
-        h1, h2, h3, h4, h5, h6,
-        [data-testid="stMarkdownContainer"] h1,
-        [data-testid="stMarkdownContainer"] h2,
-        [data-testid="stMarkdownContainer"] h3,
-        [data-testid="stTitle"] {
-            color: #111d17 !important;
-            opacity: 1 !important;
-            letter-spacing: -.025em;
-        }
-        h1 { font-size: 2.15rem !important; font-weight: 800 !important; }
-        h2 { font-size: 1.45rem !important; font-weight: 750 !important; }
-        h3 { font-size: 1.15rem !important; font-weight: 750 !important; }
-        h4 { font-size: 1.08rem !important; font-weight: 750 !important; }
-        p, label, [data-testid="stMarkdownContainer"] p,
-        [data-testid="stCaptionContainer"] p, .stCaption {
-            color: #52645b !important;
-            opacity: 1 !important;
-        }
-        [data-testid="stCaptionContainer"] p, .stCaption {
-            color: #839189 !important;
-        }
-        [data-testid="stVerticalBlockBorderWrapper"],
-        div[data-testid="stVerticalBlockBorderWrapper"] {
-            background: linear-gradient(145deg, #ffffff 0%, #faf8f4 100%) !important;
-            border: 1px solid #e5ded5 !important;
-            border-radius: 17px !important;
-            box-shadow: 0 7px 22px rgba(48,54,46,.09) !important;
-            overflow: visible !important;
-        }
-        [data-testid="stMetric"] { padding: .8rem .65rem; }
-        [data-testid="stMetricLabel"],
-        [data-testid="stMetricLabel"] *,
-        [data-testid="stMetricLabel"] p {
-            color: #263a30 !important;
-            opacity: 1 !important;
-            font-size: .96rem !important;
-            font-weight: 750 !important;
-        }
-        [data-testid="stMetricValue"],
-        [data-testid="stMetricValue"] *,
-        [data-testid="stMetricValue"] div {
-            color: #13231b !important;
-            opacity: 1 !important;
-            font-weight: 850 !important;
-            font-size: 2.45rem !important;
-        }
-        [data-testid="stMetricDelta"] { font-weight: 800 !important; }
-        [data-testid="stMetric"] [data-testid="stTooltipIcon"] { display: none !important; }
-        .dash-eyebrow {
-            color: #08734a !important;
-            font-size: .78rem;
-            font-weight: 850;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            margin-bottom: .35rem;
-        }
-        .dash-subtitle {
-            color: #53665c !important;
-            font-size: .98rem;
-            margin-top: 0;
-            margin-bottom: 1.25rem;
-        }
-        .dash-section-note {
-            color: #53665c !important;
-            font-size: .85rem;
-            margin-top: -.55rem;
-            margin-bottom: .8rem;
-        }
-        .dash-pill {
-            display:inline-block;
-            padding:4px 10px;
-            border-radius:999px;
-            font-size:12px;
-            font-weight:700;
-            white-space:nowrap;
-        }
-        .dash-positive { background:#e1f3e7; color:#07543d; }
-        .dash-negative { background:#fde8e8; color:#a52c35; }
-        .dash-neutral { background:#edf1ee; color:#46564d; }
-        [data-testid="stSelectbox"] label,
-        [data-testid="stTextInput"] label,
-        [data-testid="stDateInput"] label {
-            color: #34483d !important;
-            font-weight: 650 !important;
-        }
-        [data-testid="stSelectbox"] > div > div,
-        [data-testid="stTextInput"] > div > div,
-        [data-testid="stDateInput"] > div > div {
-            background: #ffffff !important;
-            border: 1px solid #ddd5cb !important;
-            border-radius: 10px !important;
-            color: #1d2b23 !important;
-        }
-        [data-testid="stSelectbox"] *, [data-testid="stTextInput"] input {
-            color: #1d2b23 !important;
-        }
-        [data-testid="stDataFrame"], [data-testid="stTable"] {
-            border: 1px solid #e2dbd2 !important;
-            border-radius: 12px !important;
-            overflow: hidden !important;
-        }
-        div[data-testid="stDownloadButton"] button,
-        div[data-testid="stButton"] button {
-            border-radius: 10px;
-            border: 1px solid #08734a;
-            font-weight: 750;
-            background: #087b4d;
-            color: #ffffff !important;
-        }
-        div[data-testid="stDownloadButton"] button:hover,
-        div[data-testid="stButton"] button:hover {
-            background: #09945b;
-            border-color: #0a6b45;
-            color: #ffffff !important;
-        }
-        hr { border-color: #e2dbd2 !important; }
-        .js-plotly-plot, .js-plotly-plot .plot-container,
-        .js-plotly-plot .svg-container, .js-plotly-plot .main-svg {
-            background: transparent !important;
-        }
-        .js-plotly-plot .xtick text,
-        .js-plotly-plot .ytick text,
-        .js-plotly-plot .legendtext,
-        .js-plotly-plot .gtitle,
-        .js-plotly-plot .annotation-text,
-        .js-plotly-plot .infolayer text {
-            fill: #34483d !important;
-        }
-        .js-plotly-plot .modebar,
-        .js-plotly-plot .modebar-container,
-        .js-plotly-plot .modebar-group,
-        .js-plotly-plot .modebar-btn {
-            background: transparent !important;
-            border: 0 !important;
-            box-shadow: none !important;
-        }
-        .js-plotly-plot .modebar-btn path { fill: #53665c !important; }
-        .js-plotly-plot .modebar-btn:hover path { fill: #087b4d !important; }
-        @media (max-width: 900px) {
-            .block-container { padding: 1.2rem 1rem 2rem !important; }
-            h1 { font-size: 1.8rem !important; }
-            [data-testid="stVerticalBlockBorderWrapper"] { border-radius: 13px !important; }
-        }
-        @media (max-width: 640px) {
-            .block-container { padding: .9rem .7rem 1.5rem !important; }
-            h1 { font-size: 1.55rem !important; }
-            [data-testid="stMetricValue"] div { font-size: 1.9rem !important; }
-        }
-        </style>
+/* Professional white-and-red healthcare theme.
+   Loaded only on authenticated application pages; authentication screens are excluded. */
+:root {
+  --health-red: #c62828;
+  --health-red-dark: #a91f24;
+  --health-red-soft: #fff1f1;
+  --health-ink: #24272b;
+  --health-muted: #68717b;
+  --health-border: #e7b9b9;
+  --health-surface: #ffffff;
+  --health-canvas: #f2f4f6;
+}
+
+html, body, [class*="css"] { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important; }
+/* Keep Streamlit's application header and toolbar visible on authenticated pages. */
+header[data-testid="stHeader"] { display: flex !important; visibility: visible !important; opacity: 1 !important; background: #fff !important; border-bottom: 1px solid #ead0d0 !important; z-index: 1000 !important; }
+[data-testid="stToolbar"], [data-testid="stDecoration"] { visibility: visible !important; opacity: 1 !important; }
+[data-testid="stToolbar"] { display: flex !important; }
+.stApp, [data-testid="stAppViewContainer"] { background: var(--health-canvas) !important; color: var(--health-ink) !important; }
+[data-testid="stMain"] { background: var(--health-canvas) !important; }
+[data-testid="stMainBlockContainer"], .main .block-container { color: var(--health-ink) !important; }
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stText"], .stText,
+[data-testid="stCaptionContainer"] p { color: var(--health-muted); }
+
+h1, h2, h3, h4, h5, h6,
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3 { color: var(--health-ink) !important; font-weight: 650 !important; letter-spacing: -0.02em; }
+
+/* Header and navigation */
+header[data-testid="stHeader"] { background: rgba(242,244,246,.97) !important; z-index: 1000 !important; }
+[data-testid="stSidebar"] {
+  background: linear-gradient(155deg, #ad2631 0%, #921d29 48%, #701722 100%) !important;
+  border-right: 1px solid #701722 !important; box-shadow: inset -1px 0 0 rgba(255,255,255,.08) !important;
+}
+section[data-testid="stSidebar"] > div { background: transparent !important; }
+section[data-testid="stSidebar"] * { color: #fff !important; }
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p { color: #fff !important; }
+section[data-testid="stSidebar"] [data-testid="stAlert"] { background: rgba(255,255,255,.12) !important; border: 1px solid rgba(255,255,255,.24) !important; }
+section[data-testid="stSidebar"] [data-testid="stAlert"] * { color: #fff !important; }
+section[data-testid="stSidebar"] [data-testid="stSidebarNav"] { padding-top: .5rem !important; }
+section[data-testid="stSidebar"] [data-testid="stSidebarNavLink"] {
+  color: #fff !important; border-radius: 10px !important; margin: 5px 8px !important;
+  padding-top: .55rem !important; padding-bottom: .55rem !important;
+  background: rgba(255,255,255,.035) !important; border: 1px solid transparent !important;
+  transition: background .18s ease, border-color .18s ease !important;
+}
+section[data-testid="stSidebar"] [data-testid="stSidebarNavLink"] span,
+section[data-testid="stSidebar"] [data-testid="stSidebarNavLink"] p { color: #fff !important; }
+section[data-testid="stSidebar"] [data-testid="stSidebarNavLink"]:hover { background: rgba(255,255,255,.13) !important; border-color: rgba(255,255,255,.16) !important; }
+section[data-testid="stSidebar"] [data-testid="stSidebarNavLink"][aria-current="page"] {
+  background: #fff !important; box-shadow: inset 4px 0 0 #ef9a9a !important;
+}
+section[data-testid="stSidebar"] [data-testid="stSidebarNavLink"][aria-current="page"] * { color: #9f1d28 !important; }
+section[data-testid="stSidebar"] .stButton button[kind="primary"] {
+  background: #fff !important; color: #a91f2b !important; border: 1px solid #fff !important;
+  border-left: 4px solid #f4b4b4 !important; box-shadow: 0 2px 8px rgba(40,0,0,.12) !important;
+}
+section[data-testid="stSidebar"] .stButton button[kind="secondary"] {
+  background: rgba(255,255,255,.08) !important; color: #fff !important;
+  border: 1px solid rgba(255,255,255,.24) !important; box-shadow: none !important;
+}
+section[data-testid="stSidebar"] .stButton button[kind="secondary"]:hover { background: rgba(255,255,255,.18) !important; border-color: #fff !important; }
+section[data-testid="stSidebar"] hr { border-color: rgba(255,255,255,.28) !important; }
+section[data-testid="stSidebar"] [data-testid="stExpander"] { background: rgba(255,255,255,.08) !important; border-color: rgba(255,255,255,.25) !important; }
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary p { color: #fff !important; }
+section[data-testid="stSidebar"] input,
+section[data-testid="stSidebar"] textarea,
+section[data-testid="stSidebar"] [data-baseweb="input"] input { color: #24272b !important; background: #fff !important; }
+/* Keep only Streamlit's native sidebar toggle icon. */
+[data-testid="stSidebarCollapseButton"], button[data-testid="collapsedControl"] {
+  visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+}
+[data-testid="stSidebarCollapseButton"]::after, button[data-testid="collapsedControl"]::after {
+  content: none !important; display: none !important;
+}
+
+/* Primary and secondary actions */
+.stButton > button, .stFormSubmitButton > button, .stDownloadButton > button,
+button[data-testid^="stBaseButton"] { border-radius: 10px !important; font-weight: 600 !important; transition: background .18s ease, border-color .18s ease, box-shadow .18s ease !important; }
+.stButton > button[kind="primary"], .stFormSubmitButton > button,
+button[data-testid="stBaseButton-primary"] { background: var(--health-red) !important; color: #fff !important; border: 1px solid var(--health-red) !important; box-shadow: 0 2px 5px rgba(160,30,35,.12) !important; }
+.stButton > button[kind="primary"]:hover, .stFormSubmitButton > button:hover,
+button[data-testid="stBaseButton-primary"]:hover { background: var(--health-red-dark) !important; border-color: var(--health-red-dark) !important; box-shadow: 0 4px 12px rgba(160,30,35,.18) !important; }
+.stButton > button[kind="secondary"], .stDownloadButton > button,
+button[data-testid="stBaseButton-secondary"] { background: #fff !important; color: var(--health-ink) !important; border: 1px solid var(--health-border) !important; box-shadow: none !important; }
+.stButton > button[kind="secondary"]:hover, .stDownloadButton > button:hover { border-color: #e5aaaa !important; color: var(--health-red) !important; background: #fffafa !important; }
+
+/* Inputs, selectors, sliders, checkboxes */
+label, [data-testid="stWidgetLabel"] p { color: var(--health-ink) !important; font-weight: 550 !important; }
+input, textarea, [data-baseweb="input"] input { color: var(--health-ink) !important; }
+input::placeholder, textarea::placeholder { color: #9299a2 !important; }
+div[data-baseweb="input"] > div, div[data-baseweb="select"] > div,
+[data-testid="stNumberInput"] [data-baseweb="input"],
+[data-testid="stTextInput"] [data-baseweb="input"],
+[data-testid="stTextArea"] textarea { background: #fff !important; border: 1px solid #d9dde3 !important; border-radius: 9px !important; color: var(--health-ink) !important; box-shadow: none !important; }
+div[data-baseweb="select"] *, [data-baseweb="popover"] * { color: var(--health-ink) !important; }
+div[data-baseweb="input"]:focus-within, div[data-baseweb="select"]:focus-within,
+[data-testid="stTextArea"] textarea:focus { border-color: var(--health-red) !important; box-shadow: 0 0 0 2px rgba(198,40,40,.10) !important; }
+[data-testid="stCheckbox"] label, [data-testid="stRadio"] label { color: var(--health-ink) !important; }
+[data-testid="stSlider"] [role="slider"] { background: var(--health-red) !important; }
+
+/* Content panels and form cards */
+[data-testid="stVerticalBlockBorderWrapper"], [data-testid="stForm"],
+[data-testid="stExpander"] { background: #fff !important; border: 1px solid #edcaca !important; border-left: 4px solid var(--health-red) !important; border-radius: 14px !important; box-shadow: 0 3px 12px rgba(110,25,30,.065) !important; }
+[data-testid="stPlotlyChart"], [data-testid="stVegaLiteChart"], [data-testid="stArrowVegaLiteChart"] {
+  background: #fff !important; border: 1px solid #edcaca !important; border-left: 4px solid var(--health-red) !important;
+  border-radius: 13px !important; padding: 8px !important; box-shadow: 0 3px 12px rgba(110,25,30,.055) !important;
+}
+[data-testid="stExpander"] summary, [data-testid="stExpander"] summary p { color: var(--health-ink) !important; }
+.st-key-tb_card, .st-key-hiv_card { background: #fff !important; border: 1px solid #e6b1b1 !important; border-top: 3px solid var(--health-red) !important; border-radius: 15px !important; box-shadow: 0 4px 16px rgba(110,25,30,.07) !important; }
+.st-key-tb_card:hover, .st-key-hiv_card:hover { border-color: #d98c8c !important; box-shadow: 0 6px 18px rgba(110,25,30,.09) !important; }
+.st-key-responsive_control_panel [data-element-to-style="stVerticalBlock"] > div { background: #fff !important; border: 1px solid var(--health-border) !important; box-shadow: 0 2px 8px rgba(25,35,45,.04) !important; backdrop-filter: none !important; }
+
+/* Disease selection segmented control */
+div[data-baseweb="button-group"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 10px !important; }
+div[data-baseweb="button-group"] button { color: var(--health-muted) !important; }
+div[data-baseweb="button-group"] button[data-testid="stBaseButton-segmented_controlActive"] { background: var(--health-red-soft) !important; color: var(--health-red) !important; }
+div[data-baseweb="button-group"]::before { background: rgba(198,40,40,.10) !important; }
+
+/* Main application hero */
+.hero-section { background: #fff !important; color: var(--health-ink) !important; border: 1px solid var(--health-border) !important; border-left: 4px solid var(--health-red) !important; border-radius: 14px !important; box-shadow: 0 3px 12px rgba(25,35,45,.045) !important; backdrop-filter: none !important; padding: 22px 24px !important; }
+.hero-title { color: var(--health-ink) !important; font-size: 1.8rem !important; font-weight: 700 !important; }
+.hero-subtitle { color: var(--health-muted) !important; opacity: 1 !important; }
+.section-title { color: var(--health-red) !important; text-shadow: none !important; }
+
+/* Tables and dataframe surfaces */
+[data-testid="stDataFrame"], [data-testid="stTable"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 10px !important; }
+[data-testid="stMetric"] { background: #fff !important; border: 1px solid var(--health-border) !important; border-radius: 12px !important; padding: 12px 14px !important; }
+[data-testid="stMetricLabel"] p { color: var(--health-muted) !important; }
+[data-testid="stMetricValue"] { color: var(--health-ink) !important; }
+[data-testid="stMetricDelta"] { color: var(--health-muted) !important; }
+[data-testid="stProgressBar"] > div > div { background: var(--health-red) !important; }
+
+/* Feedback, notices and footer */
+[data-testid="stAlert"] { border-radius: 10px !important; }
+[data-testid="stCaptionContainer"] p { color: var(--health-muted) !important; font-size: .86rem !important; }
+hr { border-color: var(--health-border) !important; }
+
+@media (max-width: 768px) {
+  [data-testid="stMainBlockContainer"] { padding-left: 1rem !important; padding-right: 1rem !important; }
+  .hero-section { padding: 18px !important; }
+  .hero-title { font-size: 1.45rem !important; }
+  .st-key-tb_card, .st-key-hiv_card { padding: 18px !important; }
+}
+
+
+/* Dropdown menus: keep the menu above cards/columns and usable on touch devices. */
+/* Let BaseWeb/Popper calculate the dropdown's position and dimensions. */
+[data-baseweb="popover"], [data-baseweb="menu"], [role="listbox"] {
+  z-index: 100000 !important; pointer-events: auto !important;
+}
+[data-baseweb="popover"] [role="listbox"] {
+  background: #fff !important; border: 1px solid #e7b9b9 !important; border-radius: 9px !important;
+  box-shadow: 0 8px 24px rgba(35,20,20,.16) !important; max-height: min(280px, 45vh) !important;
+  overflow-y: auto !important; min-width: 100% !important;
+}
+[data-baseweb="popover"] [role="option"], [data-baseweb="popover"] [role="listbox"] [role="option"], [role="listbox"] [role="option"] {
+  color: #24272b !important; background: #fff !important; min-height: 42px !important;
+  cursor: pointer !important; touch-action: manipulation !important;
+}
+[data-baseweb="popover"] [role="option"]:hover,
+[data-baseweb="popover"] [aria-selected="true"] { background: #fff0f0 !important; color: #a91f2b !important; }
+[data-baseweb="select"] { cursor: pointer !important; touch-action: manipulation !important; }
+[data-baseweb="select"] > div { min-height: 44px !important; }
+[data-testid="stSelectbox"] [data-baseweb="select"] svg { fill: #a91f2b !important; }
+/* Do not let questionnaire wrappers clip the native Streamlit dropdown portal. */
+.st-key-tb_card, .st-key-hiv_card,
+[data-testid="stVerticalBlockBorderWrapper"], [data-testid="stHorizontalBlock"],
+[data-testid="column"], [data-testid="stMainBlockContainer"] { overflow: visible !important; }
+/* All action buttons retain strong contrast and comfortable tap targets. */
+.stButton > button, .stFormSubmitButton > button, .stDownloadButton > button,
+button[data-testid^="stBaseButton"] { min-height: 42px !important; opacity: 1 !important; visibility: visible !important; }
+.stButton > button:disabled, button[data-testid^="stBaseButton"]:disabled { opacity: .62 !important; }
+/* Responsive questionnaire: stack columns on narrow phone screens. */
+@media (max-width: 700px) {
+  [data-testid="stMainBlockContainer"] { padding-left: .8rem !important; padding-right: .8rem !important; }
+  [data-testid="stHorizontalBlock"] { flex-wrap: wrap !important; gap: .75rem !important; }
+  [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex: 1 1 100% !important; min-width: 100% !important; width: 100% !important; }
+  .st-key-tb_card, .st-key-hiv_card { padding: 16px !important; }
+  .stButton > button, .stFormSubmitButton > button, .stDownloadButton > button { width: 100% !important; }
+  section[data-testid="stSidebar"] { min-width: min(85vw, 320px) !important; }
+}
+
+
+/* Explicit disease navigation states: active is white/red, inactive is translucent/white. */
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] { background:#fff !important; color:#9f1d28 !important; border:1px solid #fff !important; border-left:4px solid #f4b4b4 !important; }
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] *, section[data-testid="stSidebar"] .stButton > button[kind="primary"] p { color:#9f1d28 !important; }
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"] { background:rgba(255,255,255,.09) !important; color:#fff !important; border:1px solid rgba(255,255,255,.28) !important; }
+section[data-testid="stSidebar"] .stButton > button[kind="secondary"] *, section[data-testid="stSidebar"] .stButton > button[kind="secondary"] p { color:#fff !important; }
+
+.hero-meta { color:#59636d !important; margin-top:1rem !important; font-size:.96rem !important; }
+.hero-meta b { color:#24272b !important; }

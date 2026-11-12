@@ -9,6 +9,7 @@ from nav.tb_page import show_tb_page
 from nav.hiv_page import show_hiv_page
 from auth import sign_up, login, logout, send_reset_otp, verify_otp_and_update_password,can_request_otp
 from database import  get_user_role, save_feedback, get_user_name,supabase
+from theme import apply_theme_css
 from streamlit_extras.stylable_container import stylable_container
 import qrcode
 from io import BytesIO
@@ -50,6 +51,13 @@ hide_streamlit_style = """
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+# Keep the Streamlit running indicator and sidebar toggle, but hide page toolbar actions.
+st.markdown("""<style>
+[data-testid="stToolbarActions"] { display: none !important; visibility: hidden !important; }
+[data-testid="stStatusWidget"] { display: flex !important; visibility: visible !important; opacity: 1 !important; }
+[data-testid="stSidebarCollapseButton"], button[data-testid="collapsedControl"] { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+</style>""", unsafe_allow_html=True)
 
 
 
@@ -667,9 +675,9 @@ def auth_page():
 
 def dashboard():
 
-    # Apply the white-and-red healthcare theme only after authentication.
-    # Login, sign-up and password-recovery screens retain their existing design.
-    local_css("assets/healthcare.css")
+    # Load exactly one stylesheet based on the active Streamlit theme.
+    # Authentication screens continue using their original styles.css.
+    apply_theme_css()
 
     disease_options = ["Tuberculosis", "HIV/AIDS"]
 
