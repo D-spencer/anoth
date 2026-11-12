@@ -704,12 +704,11 @@ def dashboard():
 
 
 
-    APP_URL = "anoth111.streamlit.app"   
+    APP_URL = "https://group2-hiv-tb.streamlit.app/"
 
     st.sidebar.divider()
 
     with st.sidebar.expander(" Share This App", icon=":material/share:", expanded=False):
-
         st.text_input(
             "App Link",
             value=APP_URL,
@@ -717,13 +716,18 @@ def dashboard():
             key="share_link"
         )
 
-        qr = qrcode.make(APP_URL)
-
-        buf = BytesIO()
-        qr.save(buf, format="PNG")
+        qr = qrcode.QRCode(
+            version=None,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            box_size=8,
+            border=4,
+        )
+        qr.add_data(APP_URL)
+        qr.make(fit=True)
+        qr_image = qr.make_image(fill_color="#090d1f", back_color="white").convert("RGB")
 
         st.image(
-            buf.getvalue(),
+            qr_image,
             width=180,
             caption="Scan QR Code"
         )
